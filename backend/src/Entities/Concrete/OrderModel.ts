@@ -1,8 +1,9 @@
-import { Schema } from "mongoose";
+import mongoose, { mongo, Schema } from "mongoose";
+import { IOrderModel } from "../Abstract/IOrderModel";
 
 const statusTypes = ["pending", "completed", "cancelled"];
 
-const orderSchema = new Schema(
+const orderSchema = new Schema<IOrderModel>(
   {
     status: { type: String, required: true, enum: statusTypes, default: "pending" },
     products: [
@@ -14,3 +15,5 @@ const orderSchema = new Schema(
   },
   { timestamps: true }
 );
+
+export const Order = mongoose.model<IOrderModel>("Order", orderSchema);
