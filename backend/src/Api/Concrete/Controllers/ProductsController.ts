@@ -3,15 +3,15 @@ import { Product } from "../../../Entities/Concrete/ProductModel";
 import IProductService from "../../../Business/Abstract/IProductService";
 
 export default class ProductsController {
-//   private productService: IProductService;
+  private productService: IProductService;
 
-//   constructor(productService: IProductService) {
-//     this.productService = productService;
-//   }
+  constructor(productService: IProductService) {
+    this.productService = productService;
+  }
 
   public GetAll = async (req: Request, res: Response) => {
     try {
-      const products = await Product.find().populate("billOfMaterials.material");
+      const products = await this.productService.GetAll();
       res.status(200).json({ success: true, message: "all products listed", data: products });
     } catch (error: any) {
       console.log(error.message);

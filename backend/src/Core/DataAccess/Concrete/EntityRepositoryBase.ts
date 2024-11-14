@@ -1,11 +1,10 @@
-import mongoose, { Model } from "mongoose";
+import mongoose, { Document, Model } from "mongoose";
 import IModel from "../../Entities/Abstract/IModel";
 import IEntityRepository from "../Abstract/IEntityRepository";
 
-export default class EntityRepositoryBase<TModel extends IModel & mongoose.Document>
-  implements IEntityRepository<TModel>
-{
+export default class EntityRepositoryBase<TModel extends IModel & Document> implements IEntityRepository<TModel> {
   private readonly _model: Model<TModel>;
+
   constructor(model: Model<TModel>) {
     this._model = model;
   }
