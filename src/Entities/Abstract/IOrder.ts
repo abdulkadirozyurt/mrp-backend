@@ -1,3 +1,4 @@
+import { Document } from "mongoose";
 import IModel from "../../Core/Entities/Abstract/IModel";
 import IProduct from "./IProduct";
 
