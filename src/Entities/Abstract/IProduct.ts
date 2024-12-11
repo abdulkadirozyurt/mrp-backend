@@ -6,4 +6,5 @@ export default interface IProduct extends IModel, Document {
   name: string;
   description: string;
   billOfMaterials: IBillOfMaterials[];
+  unitType: string;
 }
