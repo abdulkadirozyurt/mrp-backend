@@ -2,28 +2,32 @@ import { inject, injectable } from "tsyringe";
 import IMaterialDal from "../../DataAccess/Abstract/IMaterialDal";
 import IMaterial from "../../Entities/Abstract/IMaterial";
 import IMaterialService from "../Abstract/IMaterialService";
+import TYPES from "../../Api/IoC/Types";
 
 @injectable()
 export default class MaterialManager implements IMaterialService {
-  private readonly _materialDal: IMaterialDal;
+  constructor(
+    @inject(TYPES.IMaterialDal)
+    private readonly _materialDal: IMaterialDal
+  ) {}
 
-  constructor(@inject("IMaterialDal") materialDal: IMaterialDal) {
-    this._materialDal = materialDal;
+  public async GetAll(): Promise<IMaterial[]> {
+    return await this._materialDal.GetAll();
   }
 
-  GetAll(): Promise<any> {
-    throw new Error("Method not implemented.");
+  public async GetById(id: string): Promise<IMaterial | null> {
+    return await this._materialDal.GetById(id);
   }
-  GetById(id: string): Promise<any> {
-    throw new Error("Method not implemented.");
+
+  public async Create(material: IMaterial): Promise<IMaterial> {
+    return await this._materialDal.Create(material);
   }
-  Create(product: IMaterial): Promise<any> {
-    return this._materialDal.Create(product);
+
+  public async Update(id: string, material: Partial<IMaterial>): Promise<IMaterial | null> {
+    return await this._materialDal.Update(id, material);
   }
-  Update(id: string, product: IMaterial): Promise<any> {
-    throw new Error("Method not implemented.");
-  }
-  Delete(id: string): Promise<any> {
-    throw new Error("Method not implemented.");
+
+  public async Delete(id: string): Promise<void> {
+    await this._materialDal.Delete(id);
   }
 }
