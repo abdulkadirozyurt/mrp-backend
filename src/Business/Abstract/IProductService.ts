@@ -1,10 +1,10 @@
-import IModel from "../../Core/Entities/Abstract/IModel";
+import { FilterQuery } from "mongoose";
 import IProduct from "../../Entities/Abstract/IProduct";
 
 export default interface IProductService {
-  GetAll(): Promise<any>;
-  GetById(id: string): Promise<any>;
-  Create(product: IProduct): Promise<any>;
-  Update(id: string, product: IProduct): Promise<any>;
-  Delete(id: string): Promise<any>;
+  GetAll(): Promise<IProduct[]>;
+  GetById(id: string): Promise<IProduct | null>;
+  Create(product: IProduct): Promise<IProduct>;
+  Update(id: string, product: Partial<IProduct>): Promise<IProduct | null>;
+  Delete(id: string): Promise<void>;
 }

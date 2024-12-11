@@ -1,68 +1,74 @@
+import TYPES from "../../IoC/Types";
 import { Request, Response } from "express";
+import { inject, injectable } from "tsyringe";
 import IMaterial from "../../../Entities/Abstract/IMaterial";
 import IMaterialService from "./../../../Business/Abstract/IMaterialService";
-import { inject, injectable } from "tsyringe";
 
 @injectable()
 export default class MaterialsController {
-  private materialService: IMaterialService;
+  constructor(
+    @inject(TYPES.IMaterialService) private readonly materialService: IMaterialService
+  ) {}
 
-  constructor(@inject("IMaterialService") materialService: IMaterialService) {
-    this.materialService = materialService;
-  }
-
-  public GetAll = async (req: Request, res: Response) => {
+  public GetAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const materials = await this.materialService.GetAll();
-      res.status(200).json({ success: true, message: "all materials listed", data: materials });
+      res.status(200).json({ success: true, message: "All materials listed", data: materials });
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       res.status(500).json({ success: false, message: error.message });
     }
   };
 
-  public GetById = async (req: Request, res: Response) => {
-    const { id } = req.params;
+  public GetById = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.body;
 
     try {
       const material = await this.materialService.GetById(id);
-      res.status(200).json({ success: true, message: "material listed", data: material });
+      if (material) {
+        res.status(200).json({ success: true, message: "Material listed", data: material });
+      } else {
+        res.status(404).json({ success: false, message: "Material not found" });
+      }
     } catch (error: any) {
-      console.log(error);
+      console.error(error);
       res.status(500).json({ success: false, message: error.message });
     }
   };
 
-  public Create = async (req: Request, res: Response) => {
+  public Create = async (req: Request, res: Response): Promise<void> => {
     try {
       const material: IMaterial = req.body;
       const result = await this.materialService.Create(material);
-      res.status(201).json({ success: true, message: "material created", data: result });
+      res.status(201).json({ success: true, message: "Material created", data: result });
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
       res.status(500).json({ success: false, message: error.message });
     }
   };
 
-  public Update = async (req: Request, res: Response) => {
-    const { id } = req.params;
+  public Update = async (req: Request, res: Response): Promise<void> => {
+    const { id, ...material } = req.body;
     try {
-      const material: IMaterial = req.body;
-      await this.materialService.Update(id, material);
-      res.status(200).json({ success: true, message: "material updated" });
+      const updatedMaterial = await this.materialService.Update(id, material);
+      if (updatedMaterial) {
+        res.status(200).json({ success: true, message: "Material updated", data: updatedMaterial });
+      } else {
+        res.status(404).json({ success: false, message: "Material not found" });
+      }
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
       res.status(500).json({ success: false, message: error.message });
     }
   };
 
-  public Delete = async (req: Request, res: Response) => {
-    const { id } = req.params;
+  public Delete = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.body;
     try {
       await this.materialService.Delete(id);
-      res.status(200).json({ success: true, message: "material deleted" });
+      res.status(204).end();
     } catch (error: any) {
-      console.log(error.message);
+      console.error(error.message);
       res.status(500).json({ success: false, message: error.message });
     }
   };
