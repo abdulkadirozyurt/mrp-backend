@@ -1,8 +1,6 @@
 import express from "express";
-import MaterialsController from "../Controllers/MaterialsController";
-import MaterialManager from "../../../Business/Concrete/MaterialManager";
-import MaterialDal from "../../../DataAccess/Concrete/Mongoose/MaterialDal";
 import iocContainer from "../../IoC/Container";
+import MaterialsController from "../Controllers/MaterialsController";
 
 const router = express.Router();
 
