@@ -13,7 +13,7 @@ export default class MaterialsController {
   public GetAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const materials = await this.materialService.GetAll();
-      res.status(200).json({ success: true, message: "All materials listed", data: materials });
+      res.status(200).json({ success: true, message: "All materials listed", materials: materials });
     } catch (error: any) {
       console.error(error);
       res.status(500).json({ success: false, message: error.message });
