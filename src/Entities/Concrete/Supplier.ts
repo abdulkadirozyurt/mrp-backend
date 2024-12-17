@@ -12,7 +12,7 @@ const supplierSchema = new Schema<ISupplier>(
     country: String,
     phone: String,
     email: String,
-    materialsOfSupplied: [{ type: mongoose.Types.ObjectId, ref: "Material" }],
+    materialsOfSupplied: [{ type: mongoose.Schema.Types.ObjectId, ref: "Material" }],
   },
   { timestamps: true }
 );

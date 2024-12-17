@@ -1,4 +1,4 @@
-import { Document } from "mongoose";
+import mongoose, { Document } from "mongoose";
 import IModel from "../../Core/Entities/Abstract/IModel";
 import ISupplier from "./ISupplier";
 
@@ -9,5 +9,5 @@ export default interface IMaterial extends IModel, Document {
   price: number;
   reorderLevel: number;
   priceHistory: Array<{ price: number; date: Date }>;
-  suppliers: Array<ISupplier>;
+  suppliers: mongoose.Schema.Types.ObjectId[];
 }

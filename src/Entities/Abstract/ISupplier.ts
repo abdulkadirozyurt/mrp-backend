@@ -1,7 +1,5 @@
-import e from "cors";
-import IMaterial from "./IMaterial";
+import mongoose, { Document } from "mongoose";
 import IModel from "../../Core/Entities/Abstract/IModel";
-import { Document } from "mongoose";
 
 export default interface ISupplier extends IModel, Document {
   name: string;
@@ -12,5 +10,5 @@ export default interface ISupplier extends IModel, Document {
   country: string;
   phone: string;
   email: string;
-  materialsOfSupplied: IMaterial[];
+  materialsOfSupplied: mongoose.Schema.Types.ObjectId[];
 }
