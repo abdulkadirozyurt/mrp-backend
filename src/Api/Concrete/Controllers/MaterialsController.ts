@@ -39,8 +39,8 @@ export default class MaterialsController {
   public Create = async (req: Request, res: Response): Promise<void> => {
     try {
       const material: IMaterial = req.body;
-      const result = await this.materialService.Create(material);
-      res.status(201).json({ success: true, message: "Material created", result: result });
+      const addedMaterial = await this.materialService.Create(material);
+      res.status(201).json({ success: true, message: "Material created", material: addedMaterial });
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ success: false, message: error.message });
