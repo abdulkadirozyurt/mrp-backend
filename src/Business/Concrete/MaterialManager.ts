@@ -3,17 +3,24 @@ import IMaterialDal from "../../DataAccess/Abstract/IMaterialDal";
 import IMaterial from "../../Entities/Abstract/IMaterial";
 import IMaterialService from "../Abstract/IMaterialService";
 import TYPES from "../../Api/IoC/Types";
+import { FilterQuery } from "mongoose";
+import IProduct from "../../Entities/Abstract/IProduct";
 
 @injectable()
 export default class MaterialManager implements IMaterialService {
   constructor(@inject(TYPES.IMaterialDal) private readonly _materialDal: IMaterialDal) {}
 
-  public async GetAll(): Promise<IMaterial[]> {
-    return await this._materialDal.GetAll({}, ["suppliers"]);
+  public async GetAll(
+    filter?: FilterQuery<IProduct>,
+    populateFields?: string[]
+  ): Promise<IMaterial[]> {
+    // return await this._materialDal.GetAll({}, ["suppliers"]);
+    return await this._materialDal.GetAll(filter, populateFields);
   }
 
-  public async GetById(id: string): Promise<IMaterial | null> {
-    return await this._materialDal.GetById(id, ["suppliers"]);
+  public async GetById(id: string, populateFields?: string[]): Promise<IMaterial | null> {
+    // return await this._materialDal.GetById(id, ["suppliers"]);
+    return await this._materialDal.GetById(id, populateFields);
   }
 
   public async Create(material: IMaterial): Promise<IMaterial> {
