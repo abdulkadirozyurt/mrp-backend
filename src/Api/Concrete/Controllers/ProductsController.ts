@@ -15,7 +15,7 @@ export default class ProductsController {
 
   public GetAll = async (req: Request, res: Response) => {
     try {
-      const products = await this.productService.GetAll();
+      const products = await this.productService.GetAll({}, ["billOfMaterials", "materialId"]);
       res.status(200).json({
         success: true,
         message: "all products listed",
@@ -31,11 +31,9 @@ export default class ProductsController {
     const { id } = req.body;
 
     try {
-      const product = await this.productService.GetById(id);
+      const product = await this.productService.GetById(id, ["billOfMaterials", "materialId"]);
       if (product) {
-        res
-          .status(200)
-          .json({ success: true, message: "product listed", data: product });
+        res.status(200).json({ success: true, message: "product listed", data: product });
       } else {
         res.status(404).json({ success: false, message: "Product not found" });
       }
@@ -49,9 +47,7 @@ export default class ProductsController {
     try {
       const product = req.body;
       const result = await this.productService.Create(product);
-      res
-        .status(201)
-        .json({ success: true, message: "product created", data: result });
+      res.status(201).json({ success: true, message: "product created", data: result });
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ success: false, message: error.message });

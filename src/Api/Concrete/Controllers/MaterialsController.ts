@@ -6,14 +6,14 @@ import IMaterialService from "./../../../Business/Abstract/IMaterialService";
 
 @injectable()
 export default class MaterialsController {
-  constructor(
-    @inject(TYPES.IMaterialService) private readonly materialService: IMaterialService
-  ) {}
+  constructor(@inject(TYPES.IMaterialService) private readonly materialService: IMaterialService) {}
 
   public GetAll = async (req: Request, res: Response): Promise<void> => {
     try {
-      const materials = await this.materialService.GetAll();
-      res.status(200).json({ success: true, message: "All materials listed", materials: materials });
+      const materials = await this.materialService.GetAll({}, ["suppliers"]);
+      res
+        .status(200)
+        .json({ success: true, message: "All materials listed", materials: materials });
     } catch (error: any) {
       console.error(error);
       res.status(500).json({ success: false, message: error.message });
@@ -24,7 +24,7 @@ export default class MaterialsController {
     const { id } = req.body;
 
     try {
-      const material = await this.materialService.GetById(id);
+      const material = await this.materialService.GetById(id, ["suppliers"]);
       if (material) {
         res.status(200).json({ success: true, message: "Material listed", data: material });
       } else {
