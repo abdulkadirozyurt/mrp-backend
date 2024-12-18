@@ -2,7 +2,8 @@ import mongoose, { Schema } from "mongoose";
 import IMaterial from "../Abstract/IMaterial";
 import ISupplier from "./../Abstract/ISupplier";
 
-const unitTypes = ["adet", "kg", "litre", "balya"];
+const unitTypes = ["piece", "kg", "liter", "bale"];
+const entryTypes = ["purchase", "production", "return", "sales", "transfer", "usage"];
 
 const materialSchema = new Schema<IMaterial>(
   {
@@ -22,9 +23,13 @@ const materialSchema = new Schema<IMaterial>(
         date: { type: Date, default: Date.now },
       },
     ],
-    suppliers: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Supplier", required: true },
-    ],
+    suppliers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Supplier", required: false }],
+    entryType: {
+      type: String,
+      enum: entryTypes,
+      required: true,
+      lowercase: true,
+    },
   },
   { timestamps: true }
 );

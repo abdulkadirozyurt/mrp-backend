@@ -6,17 +6,14 @@ import TYPES from "../../Api/IoC/Types";
 
 @injectable()
 export default class MaterialManager implements IMaterialService {
-  constructor(
-    @inject(TYPES.IMaterialDal)
-    private readonly _materialDal: IMaterialDal
-  ) {}
+  constructor(@inject(TYPES.IMaterialDal) private readonly _materialDal: IMaterialDal) {}
 
   public async GetAll(): Promise<IMaterial[]> {
-    return await this._materialDal.GetAll();
+    return await this._materialDal.GetAll({}, ["suppliers"]);
   }
 
   public async GetById(id: string): Promise<IMaterial | null> {
-    return await this._materialDal.GetById(id);
+    return await this._materialDal.GetById(id, ["suppliers"]);
   }
 
   public async Create(material: IMaterial): Promise<IMaterial> {

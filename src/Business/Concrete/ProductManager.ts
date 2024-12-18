@@ -13,11 +13,11 @@ export default class ProductManager implements IProductService {
   }
 
   public async GetAll(): Promise<IProduct[]> {
-    return this._productDal.GetAll({}, ["billOfMaterials.material"]);
+    return this._productDal.GetAll({}, ["billOfMaterials.materialId"]);
   }
 
   public async GetById(id: string): Promise<IProduct | null> {
-    return this._productDal.GetById(id, ["billOfMaterials.material"]);
+    return this._productDal.GetById(id, ["billOfMaterials.materialId"]);
   }
   public async Create(product: IProduct): Promise<IProduct> {
     return this._productDal.Create(product);

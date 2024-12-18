@@ -10,5 +10,5 @@ export default interface ISupplier extends IModel, Document {
   country: string;
   phone: string;
   email: string;
-  materialsOfSupplied: mongoose.Schema.Types.ObjectId[];
+  materialsOfSupplied: mongoose.Schema.Types.ObjectId[];  
 }

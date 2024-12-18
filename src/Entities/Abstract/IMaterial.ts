@@ -10,4 +10,5 @@ export default interface IMaterial extends IModel, Document {
   reorderLevel: number;
   priceHistory: Array<{ price: number; date: Date }>;
   suppliers: mongoose.Schema.Types.ObjectId[];
+  entryType: string;
 }
