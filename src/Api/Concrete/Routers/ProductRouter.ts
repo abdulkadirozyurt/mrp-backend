@@ -8,9 +8,19 @@ const router = express.Router();
 const productsController = iocContainer.resolve(ProductsController);
 
 router.get("/", productsController.GetAll);
+
 router.get("/id", productsController.GetById);
-router.post("/", productsController.Create);
-router.put("/", productsController.Update);
-router.delete("/", productsController.Delete);
+
+router.post("/", (req, res) => {
+  productsController.Create(req, res);
+});
+
+router.put("/", (req, res) => {
+  productsController.Update(req, res);
+});
+
+router.delete("/", (req, res) => {
+  productsController.Delete(req, res);
+});
 
 export default router;
