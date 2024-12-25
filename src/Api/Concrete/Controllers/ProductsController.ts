@@ -44,17 +44,6 @@ export default class ProductsController {
     }
   };
 
-  // public Create = async (req: Request, res: Response) => {
-  //   try {
-  //     const product = req.body;
-  //     const result = await this.productService.Create(product);
-  //     res.status(201).json({ success: true, message: "product created", data: result });
-  //   } catch (error: any) {
-  //     console.error(error.message);
-  //     res.status(500).json({ success: false, message: error.message });
-  //   }
-  // };
-
   public Create = async (req: Request, res: Response) => {
     try {
       const product: IProduct = req.body;
@@ -75,6 +64,9 @@ export default class ProductsController {
             message: `Material stock amount is not enough: ${materialExists.name}`,
           });
         }
+
+        materialExists.stockAmount -= item.quantity;
+        await materialExists.save();
       }
 
       const result = await this.productService.Create(product);
@@ -89,34 +81,46 @@ export default class ProductsController {
     const { id, ...product } = req.body;
 
     try {
+      // Eski ürün bilgisi
       const existingProduct = await this.productService.GetById(id);
       if (!existingProduct) {
         return res.status(404).json({ success: false, message: "Product not found" });
       }
 
-      for (const item of product.billOfMaterials) {
-        const materialExists = await this.materialService.GetById(item.materialId);
-        if (!materialExists) {
-          return res.status(400).json({ success: false, message: `Material not found: ${item.materialId}` });
-        }
-
-        if (materialExists.stockAmount < item.quantity) {
-          return res.status(400).json({
-            success: false,
-            message: `Material stock amount is not enough: ${materialExists.name}`,
-          });
+      // Eski stokları geri yükle
+      for (const item of existingProduct.billOfMaterials) {
+        const material = await this.materialService.GetById(item.materialId.toString());
+        if (material) {
+          material.stockAmount += item.quantity;
+          await material.save();
         }
       }
 
+      // Yeni stok kontrolü ve güncelleme
+      for (const item of product.billOfMaterials) {
+        const material = await this.materialService.GetById(item.materialId.toString());
+        if (!material) {
+          return res.status(400).json({ success: false, message: `Material not found: ${item.materialId}` });
+        }
+
+        if (material.stockAmount < item.quantity) {
+          return res.status(400).json({
+            success: false,
+            message: `Insufficient stock for material: ${material.name} (Required: ${item.quantity}, Available: ${material.stockAmount})`,
+          });
+        }
+
+        material.stockAmount -= item.quantity;
+        await material.save();
+      }
+
+      // Ürünü güncelle
       const updatedProduct = await this.productService.Update(id, product);
-      res.status(200).json({
-        success: true,
-        message: "Product updated successfully",
-        data: updatedProduct,
-      });
+      const populatedProduct = await this.productService.GetById(id, ["billOfMaterials"]);
+      return res.status(200).json({ success: true, message: "Product updated", data: populatedProduct });
     } catch (error: any) {
       console.error(error.message);
-      res.status(500).json({ success: false, message: error.message });
+      return res.status(500).json({ success: false, message: error.message });
     }
   };
 
