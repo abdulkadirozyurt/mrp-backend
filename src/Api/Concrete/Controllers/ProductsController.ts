@@ -16,30 +16,28 @@ export default class ProductsController {
 
   public GetAll = async (req: Request, res: Response) => {
     try {
-      const products = await this.productService.GetAll({}, ["billOfMaterials", "materialId"]);
+      const products = await this.productService.GetAll({}, ["billOfMaterials.materialId"]);
       res.status(200).json({
         success: true,
-        message: "all products listed",
+        message: "All products listed",
         products: products,
       });
     } catch (error: any) {
-      console.log(error);
+      console.error(error.message);
       res.status(500).json({ success: false, message: error.message });
     }
   };
 
   public GetById = async (req: Request, res: Response) => {
     const { id } = req.body;
-
     try {
-      const product = await this.productService.GetById(id, ["billOfMaterials", "materialId"]);
-      if (product) {
-        res.status(200).json({ success: true, message: "product listed", data: product });
-      } else {
-        res.status(404).json({ success: false, message: "Product not found" });
+      const product = await this.productService.GetById(id, ["billOfMaterials.materialId"]);
+      if (!product) {
+        return res.status(404).json({ success: false, message: "Product not found" });
       }
+      res.status(200).json({ success: true, message: "Product listed", data: product });
     } catch (error: any) {
-      console.error(error);
+      console.error(error.message);
       res.status(500).json({ success: false, message: error.message });
     }
   };
@@ -52,28 +50,11 @@ export default class ProductsController {
         return res.status(400).json({ success: false, message: "Missing required fields" });
       }
 
-      for (const item of product.billOfMaterials) {
-        const materialExists = await this.materialService.GetById(item.materialId.toString());
-        if (!materialExists) {
-          return res.status(400).json({ success: false, message: `Material not found: ${item.materialId}` });
-        }
-
-        if (materialExists.stockAmount < item.quantity) {
-          return res.status(400).json({
-            success: false,
-            message: `Material stock amount is not enough: ${materialExists.name}`,
-          });
-        }
-
-        materialExists.stockAmount -= item.quantity;
-        await materialExists.save();
-      }
-
       const result = await this.productService.Create(product);
-      return res.status(201).json({ success: true, message: "Product created", result: result });
+      res.status(201).json({ success: true, message: "Product created", result: result });
     } catch (error: any) {
       console.error(error.message);
-      return res.status(500).json({ success: false, message: error.message });
+      res.status(500).json({ success: false, message: error.message });
     }
   };
 
@@ -81,46 +62,16 @@ export default class ProductsController {
     const { id, ...product } = req.body;
 
     try {
-      // Eski ürün bilgisi
       const existingProduct = await this.productService.GetById(id);
       if (!existingProduct) {
         return res.status(404).json({ success: false, message: "Product not found" });
       }
 
-      // Eski stokları geri yükle
-      for (const item of existingProduct.billOfMaterials) {
-        const material = await this.materialService.GetById(item.materialId.toString());
-        if (material) {
-          material.stockAmount += item.quantity;
-          await material.save();
-        }
-      }
-
-      // Yeni stok kontrolü ve güncelleme
-      for (const item of product.billOfMaterials) {
-        const material = await this.materialService.GetById(item.materialId.toString());
-        if (!material) {
-          return res.status(400).json({ success: false, message: `Material not found: ${item.materialId}` });
-        }
-
-        if (material.stockAmount < item.quantity) {
-          return res.status(400).json({
-            success: false,
-            message: `Insufficient stock for material: ${material.name} (Required: ${item.quantity}, Available: ${material.stockAmount})`,
-          });
-        }
-
-        material.stockAmount -= item.quantity;
-        await material.save();
-      }
-
-      // Ürünü güncelle
       const updatedProduct = await this.productService.Update(id, product);
-      const populatedProduct = await this.productService.GetById(id, ["billOfMaterials"]);
-      return res.status(200).json({ success: true, message: "Product updated", data: populatedProduct });
+      res.status(200).json({ success: true, message: "Product updated", data: updatedProduct });
     } catch (error: any) {
       console.error(error.message);
-      return res.status(500).json({ success: false, message: error.message });
+      res.status(500).json({ success: false, message: error.message });
     }
   };
 
@@ -128,7 +79,6 @@ export default class ProductsController {
     const { id } = req.body;
     try {
       const existingProduct = await this.productService.GetById(id);
-
       if (!existingProduct) {
         return res.status(404).json({ success: false, message: "Product not found" });
       }
@@ -141,10 +91,10 @@ export default class ProductsController {
       }
 
       await this.productService.Delete(id);
-      return res.status(204).end();
+      res.status(204).end();
     } catch (error: any) {
       console.error(error.message);
-      return res.status(500).json({ success: false, message: error.message });
+      res.status(500).json({ success: false, message: error.message });
     }
   };
 }
