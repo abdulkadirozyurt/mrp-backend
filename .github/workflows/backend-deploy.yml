@@ -40,3 +40,4 @@ jobs:
             pm2 delete backend-app || true
             pm2 start app.js --name "backend-app" --env production
           EOF
+          
