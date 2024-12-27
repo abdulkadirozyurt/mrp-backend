@@ -29,9 +29,6 @@ jobs:
           echo "CLIENT_URL=${{ secrets.CLIENT_URL }}" >> $GITHUB_ENV
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
 
-      - name: Print Environment Variables
-        run: printenv
-
       - name: Start Backend
         run: |
           npm start
