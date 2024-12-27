@@ -21,23 +21,20 @@ jobs:
         run: |
           npm run build
 
-      - name: Copy Backend to VDS
-        uses: appleboy/scp-action@v0.1.1
-        with:
-          host: 193.35.154.226
-          username: root
-          key: ${{ secrets.VDS_SSH_KEY }}
-          source: ./dist
-          target: /var/www/backend
-          debug: true
+      - name: Validate SSH Key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VDS_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 193.35.154.226 >> ~/.ssh/known_hosts
 
       - name: Start Backend with PM2
         run: |
-          ssh -i ~/.ssh/id_rsa root@193.35.154.226 << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@193.35.154.226 << 'EOF'
             cd /var/www/backend
             npm install -g pm2
             pm2 stop backend-app || true
             pm2 delete backend-app || true
             pm2 start app.js --name "backend-app" --env production
           EOF
-          
