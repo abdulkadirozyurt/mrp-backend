@@ -10,7 +10,7 @@ const productSchema = new Schema<IProduct>(
     unitType: { type: String, required: true, lowercase: true, enum: unitTypes },
     billOfMaterials: [
       {
-        material: { type: mongoose.Schema.Types.ObjectId, ref: "Material",required: true },
+        materialId: { type: mongoose.Schema.Types.ObjectId, ref: "Material",required: true },
         quantity: { type: Number, required: true },
       },
     ],

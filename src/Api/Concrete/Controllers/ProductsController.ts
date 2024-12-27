@@ -17,14 +17,14 @@ export default class ProductsController {
   public GetAll = async (req: Request, res: Response) => {
     try {
       const products = await this.productService.GetAll({}, ["billOfMaterials.materialId"]);
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: "All products listed",
         products: products,
       });
     } catch (error: any) {
       console.error(error.message);
-      res.status(500).json({ success: false, message: error.message });
+      return res.status(500).json({ success: false, message: error.message });
     }
   };
 
@@ -38,7 +38,7 @@ export default class ProductsController {
       res.status(200).json({ success: true, message: "Product listed", data: product });
     } catch (error: any) {
       console.error(error.message);
-      res.status(500).json({ success: false, message: error.message });
+      return res.status(500).json({ success: false, message: error.message });
     }
   };
 
@@ -51,10 +51,10 @@ export default class ProductsController {
       }
 
       const result = await this.productService.Create(product);
-      res.status(201).json({ success: true, message: "Product created", result: result });
+      return res.status(201).json({ success: true, message: "Product created", result: result });
     } catch (error: any) {
       console.error(error.message);
-      res.status(500).json({ success: false, message: error.message });
+      return res.status(500).json({ success: false, message: error.message });
     }
   };
 
@@ -91,10 +91,10 @@ export default class ProductsController {
       }
 
       await this.productService.Delete(id);
-      res.status(204).end();
+      return res.status(204).json({ success: true, message: "Product deleted" });
     } catch (error: any) {
       console.error(error.message);
-      res.status(500).json({ success: false, message: error.message });
+      return res.status(500).json({ success: false, message: error.message });
     }
   };
 }

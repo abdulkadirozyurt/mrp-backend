@@ -7,9 +7,9 @@ const router = express.Router();
 // const productsController = new ProductsController(new ProductManager(new ProductDal()));
 const productsController = iocContainer.resolve(ProductsController);
 
-router.get("/", productsController.GetAll);
+router.get("/", (req, res) => {productsController.GetAll(req, res)});
 
-router.get("/id", productsController.GetById);
+router.get("/id", (req, res) => {productsController.GetById(req, res)});
 
 router.post("/", (req, res) => {
   productsController.Create(req, res);
