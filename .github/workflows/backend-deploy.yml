@@ -29,6 +29,7 @@ jobs:
           echo "CLIENT_URL=${{ secrets.CLIENT_URL }}" >> $GITHUB_ENV
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
 
-      - name: Start Backend
+      - name: Start Backend with PM2
         run: |
-          npm start
+          npm install -g pm2
+          pm2 start dist/app.js --name "backend-app"
