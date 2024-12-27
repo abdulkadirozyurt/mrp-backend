@@ -15,12 +15,10 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd ../../
           npm install
 
       - name: Build Backend
         run: |
-          cd ../../
           npm run build
 
       - name: Set Environment Variables
@@ -33,5 +31,4 @@ jobs:
 
       - name: Start Backend
         run: |
-          cd ../../
           npm start
