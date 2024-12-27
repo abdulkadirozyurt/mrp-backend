@@ -37,9 +37,7 @@ export default class EntityRepositoryBase<TModel extends IModel & Document>
   }
 
   async Update(id: string, entity: Partial<TModel>): Promise<TModel | null> {
-    return await this._model
-      .findByIdAndUpdate(id, entity, { new: true })
-      .exec();
+    return await this._model.findByIdAndUpdate(id, entity, { new: true }).exec();
   }
 
   async Delete(id: string): Promise<void> {

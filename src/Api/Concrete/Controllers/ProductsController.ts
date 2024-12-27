@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
-import { Product } from "../../../Entities/Concrete/Product";
+import { inject, injectable } from "tsyringe";
+import IMaterialService from "../../../Business/Abstract/IMaterialService";
 import IProductService from "../../../Business/Abstract/IProductService";
 import IProduct from "../../../Entities/Abstract/IProduct";
-import { inject, injectable } from "tsyringe";
 import TYPES from "../../IoC/Types";
-import { Material } from "../../../Entities/Concrete/Material";
-import IMaterialService from "../../../Business/Abstract/IMaterialService";
+import mongoose from "mongoose";
 
 @injectable()
 export default class ProductsController {
@@ -30,6 +29,7 @@ export default class ProductsController {
 
   public GetById = async (req: Request, res: Response) => {
     const { id } = req.body;
+    // const objectId = new mongoose.Schema.Types.ObjectId(id);
     try {
       const product = await this.productService.GetById(id, ["billOfMaterials.materialId"]);
       if (!product) {
