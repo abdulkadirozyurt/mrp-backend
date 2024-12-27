@@ -33,9 +33,9 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@193.35.154.226 << 'EOF'
             cd /var/www/backend
-            npm install -g pm2
             pm2 stop backend-app || true
             pm2 delete backend-app || true
-            pm2 start app.js --name "backend-app" --env production
+            pm2 start dist/app.js --name "backend-app" --env production
           EOF
-          
+
+
