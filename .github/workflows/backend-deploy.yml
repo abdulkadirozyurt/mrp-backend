@@ -21,15 +21,22 @@ jobs:
         run: |
           npm run build
 
-      - name: Set Environment Variables
-        run: |
-          echo "PORT=${{ secrets.PORT }}" >> $GITHUB_ENV
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> $GITHUB_ENV
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
-          echo "CLIENT_URL=${{ secrets.CLIENT_URL }}" >> $GITHUB_ENV
-          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $GITHUB_ENV
+      - name: Copy Backend to VDS
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: 193.35.154.226
+          username: root
+          key: ${{ secrets.VDS_SSH_KEY }}
+          source: ./dist
+          target: /var/www/backend
+          debug: true
 
       - name: Start Backend with PM2
         run: |
-          npm install -g pm2
-          pm2 start dist/app.js --name "backend-app"
+          ssh -i ~/.ssh/id_rsa root@193.35.154.226 << 'EOF'
+            cd /var/www/backend
+            npm install -g pm2
+            pm2 stop backend-app || true
+            pm2 delete backend-app || true
+            pm2 start app.js --name "backend-app" --env production
+          EOF
