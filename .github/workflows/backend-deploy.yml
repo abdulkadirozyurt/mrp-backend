@@ -38,7 +38,6 @@
 #             pm2 start dist/app.js --name "backend-app" --env production
 #           EOF
 
-
 name: Deploy Backend
 
 on:
@@ -66,7 +65,6 @@ jobs:
           echo "${{ secrets.VDS_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.VDS_IP }} >> ~/.ssh/known_hosts
-
 
       - name: Build Docker Image
         run: |
