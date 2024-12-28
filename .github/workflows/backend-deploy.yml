@@ -36,12 +36,24 @@ jobs:
           docker push ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
       - name: Deploy to VDS
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          VDS_IP: ${{ secrets.VDS_IP }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << 'EOF'
-            docker pull ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
-            docker stop backend-container || true
-            docker rm backend-container || true
-            docker run -d --name backend-container -p 5000:5000 -e PORT=5000 -e MONGO_URI=${{ secrets.MONGO_URI }} -e DB_NAME=${{ secrets.DB_NAME }} -e CLIENT_URL=http://${{ secrets.VDS_IP }} -e JWT_SECRET=${{ secrets.JWT_SECRET }} ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
-          EOF
-
-
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << 'EOFMARK'
+          docker pull ${DOCKER_USERNAME}/my-backend-image:latest
+          docker stop backend-container || true
+          docker rm backend-container || true
+          docker run -d \
+            --name backend-container \
+            -p 5000:5000 \
+            -e PORT=5000 \
+            -e MONGO_URI="${MONGO_URI}" \
+            -e DB_NAME="${DB_NAME}" \
+            -e CLIENT_URL="http://${VDS_IP}" \
+            -e JWT_SECRET="${JWT_SECRET}" \
+            ${DOCKER_USERNAME}/my-backend-image:latest
+          EOFMARK
