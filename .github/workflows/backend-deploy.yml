@@ -1,43 +1,3 @@
-# name: Deploy Backend
-
-# on:
-#   push:
-#     branches:
-#       - main
-
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout Repository
-#         uses: actions/checkout@v3
-
-#       - name: Install Dependencies
-#         run: |
-#           npm install
-
-#       - name: Build Backend
-#         run: |
-#           npm run build
-
-#       - name: Validate SSH Key
-#         run: |
-#           mkdir -p ~/.ssh
-#           echo "${{ secrets.VDS_SSH_KEY }}" > ~/.ssh/id_rsa
-#           chmod 700 ~/.ssh
-#           chmod 600 ~/.ssh/id_rsa
-#           ssh-keyscan -H 193.35.154.226 >> ~/.ssh/known_hosts
-
-#       - name: Start Backend with PM2
-#         run: |
-#           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@193.35.154.226 << 'EOF'
-#             cd /var/www/backend
-#             pm2 stop backend-app || true
-#             pm2 delete backend-app || true
-#             pm2 start dist/app.js --name "backend-app" --env production
-#           EOF
-
 name: Deploy Backend
 
 on:
@@ -68,7 +28,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t my-backend-image .
+          docker build --no-cache --platform=linux/amd64 -t my-backend-image .
           docker tag my-backend-image ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
       - name: Push Docker Image to DockerHub
