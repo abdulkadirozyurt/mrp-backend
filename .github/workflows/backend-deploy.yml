@@ -55,6 +55,7 @@ jobs:
           docker rm backend-container || true
           docker run -d \
             --name backend-container \
+            --restart always \
             --env-file /var/www/backend/.env \
             -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
