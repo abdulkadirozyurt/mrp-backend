@@ -35,6 +35,12 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
+      - name: Cleanup Docker Images and Volumes
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
+          docker system prune -af --volumes || true
+          EOFMARK
+
       - name: Deploy to VDS
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
