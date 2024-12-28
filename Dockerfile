@@ -13,6 +13,7 @@ RUN npm install
 # Tüm dosyaları kopyala
 COPY . .
 
+
 # Uygulamayı build et
 RUN npm run build
 
