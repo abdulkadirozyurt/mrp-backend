@@ -10,7 +10,7 @@ const UserSchema = new Schema<IUser>(
     department: { type: String },
     position: { type: String },
     address: { type: String },
-    phoneNumber: { type: String, unique: true,  required: false },  
+    phoneNumber: { type: String, unique: true, sparse: true },
     employeeCode: { type: String, required: true, unique: true },
     role: {
       type: String,
