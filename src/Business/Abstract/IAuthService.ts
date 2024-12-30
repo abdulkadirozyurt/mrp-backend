@@ -1,6 +1,6 @@
 import { User } from "./../../Entities/Concrete/User";
 import { inject, injectable } from "tsyringe";
-import TYPES from "../../Api/IoC/Types";
+import TYPES from "../../Api/IoC/ContainerTypes";
 import IUserDal from "../../DataAccess/Abstract/IUserDal";
 import IUser from "../../Entities/Abstract/IUser";
 

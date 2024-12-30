@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import TYPES from "../../IoC/Types";
+import TYPES from "../../IoC/ContainerTypes";
 import ISupplierService from "../../../Business/Abstract/ISupplierService";
 import { Request, Response } from "express";
 

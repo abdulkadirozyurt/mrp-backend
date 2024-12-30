@@ -3,7 +3,7 @@ import { inject, injectable } from "tsyringe";
 import IMaterialService from "../../../Business/Abstract/IMaterialService";
 import IProductService from "../../../Business/Abstract/IProductService";
 import IProduct from "../../../Entities/Abstract/IProduct";
-import TYPES from "../../IoC/Types";
+import TYPES from "../../IoC/ContainerTypes";
 import mongoose from "mongoose";
 
 @injectable()
