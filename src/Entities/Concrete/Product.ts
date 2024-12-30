@@ -1,16 +1,15 @@
 import mongoose, { Schema } from "mongoose";
 import IProduct from "../Abstract/IProduct";
-
-const unitTypes = ["adet", "kg", "litre", "balya"];
+import { ProductUnitTypes } from "../../Utilities/Enums/Product/productEnums";
 
 const productSchema = new Schema<IProduct>(
   {
     name: { type: String, required: true, unique: true, lowercase: true },
     description: { type: String },
-    unitType: { type: String, required: true, lowercase: true, enum: unitTypes },
+    unitType: { type: String, required: true, lowercase: true, enum: Object.values(ProductUnitTypes) },
     billOfMaterials: [
       {
-        materialId: { type: mongoose.Schema.Types.ObjectId, ref: "Material",required: true },
+        materialId: { type: mongoose.Schema.Types.ObjectId, ref: "Material", required: true },
         quantity: { type: Number, required: true },
       },
     ],

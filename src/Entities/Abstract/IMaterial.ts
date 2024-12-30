@@ -1,14 +1,15 @@
 import mongoose, { Document } from "mongoose";
+import { EntryType } from "perf_hooks";
 import IModel from "../../Core/Entities/Abstract/IModel";
-import ISupplier from "./ISupplier";
+import { MaterialEntryTypes, MaterialUnitTypes } from "../../Utilities/Enums/Material/materialEnums";
 
 export default interface IMaterial extends IModel, Document {
   name: string;
   stockAmount: number;
-  unitType: string;
+  unitType: MaterialUnitTypes;
   price: number;
   reorderLevel: number;
   priceHistory: Array<{ price: number; date: Date }>;
   suppliers: mongoose.Schema.Types.ObjectId[];
-  entryType: string;
+  entryType: MaterialEntryTypes;
 }

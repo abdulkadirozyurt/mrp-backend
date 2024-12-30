@@ -5,7 +5,7 @@ import IMaterialService from "../Abstract/IMaterialService";
 import TYPES from "../../Api/IoC/ContainerTypes";
 import { FilterQuery } from "mongoose";
 import IProduct from "../../Entities/Abstract/IProduct";
-import { MovementType } from "../../Utilities/Enums/Material/movementTypes";
+import { MaterialMovementTypes } from "../../Utilities/Enums/Material/materialEnums";
 
 @injectable()
 export default class MaterialManager implements IMaterialService {
@@ -36,7 +36,7 @@ export default class MaterialManager implements IMaterialService {
   public async UpdateStock(
     id: string,
     quantity: number,
-    movementType: MovementType
+    movementType: MaterialMovementTypes
   ): Promise<IMaterial | null> {
     return await this._materialDal.UpdateStock(id, quantity, movementType);
   }
@@ -46,7 +46,7 @@ export default class MaterialManager implements IMaterialService {
     targetMaterialId: string,
     quantity: number
   ): Promise<void> {
-    await this._materialDal.UpdateStock(sourceMaterialId, quantity, MovementType.OUT);
-    await this._materialDal.UpdateStock(targetMaterialId, quantity, MovementType.IN);
+    await this._materialDal.UpdateStock(sourceMaterialId, quantity, MaterialMovementTypes.OUT);
+    await this._materialDal.UpdateStock(targetMaterialId, quantity, MaterialMovementTypes.IN);
   }
 }
