@@ -1,4 +1,4 @@
-import TYPES from "../../Api/IoC/Types";
+import TYPES from "../../Api/IoC/ContainerTypes";
 import { inject, injectable } from "tsyringe";
 import IProduct from "../../Entities/Abstract/IProduct";
 import IProductService from "../Abstract/IProductService";

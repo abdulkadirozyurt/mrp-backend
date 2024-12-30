@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import IAuthService from "../Abstract/IAuthService";
 import IUser from "../../Entities/Abstract/IUser";
-import TYPES from "../../Api/IoC/Types";
+import TYPES from "../../Api/IoC/ContainerTypes";
 import IUserDal from "../../DataAccess/Abstract/IUserDal";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
