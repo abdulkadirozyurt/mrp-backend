@@ -68,7 +68,7 @@ export default class ProductsController {
       }
 
       const updatedProduct = await this.productService.Update(id, product);
-      res.status(200).json({ success: true, message: "Product updated", data: updatedProduct });
+      res.status(200).json({ success: true, message: "Product updated", updatedProduct: updatedProduct });
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ success: false, message: error.message });
