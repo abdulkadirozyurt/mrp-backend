@@ -1,6 +1,12 @@
-export enum OrderStatusTypes {
-    PENDING = "pending",
-    COMPLETED = "completed",
-    CANCELLED = "cancelled"
+export enum OrderStatus {
+  PENDING = "pending",
+  CONFIRMED = "confirmed",
+  DELIVERED = "delivered",
+  CANCELLED = "cancelled",
 }
 
+export enum OrderType {
+  CUSTOMER = "customer",
+  SUPPLIER = "supplier",
+}
+    
