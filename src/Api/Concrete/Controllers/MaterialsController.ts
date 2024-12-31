@@ -1,4 +1,4 @@
-import TYPES from "../../IoC/Types";
+import ContainerTypes from "../../IoC/ContainerTypes";
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import IMaterial from "../../../Entities/Abstract/IMaterial";
@@ -6,14 +6,12 @@ import IMaterialService from "./../../../Business/Abstract/IMaterialService";
 
 @injectable()
 export default class MaterialsController {
-  constructor(@inject(TYPES.IMaterialService) private readonly materialService: IMaterialService) {}
+  constructor(@inject(ContainerTypes.IMaterialService) private readonly materialService: IMaterialService) {}
 
   public GetAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const materials = await this.materialService.GetAll({}, ["suppliers"]);
-      res
-        .status(200)
-        .json({ success: true, message: "All materials listed", materials: materials });
+      res.status(200).json({ success: true, message: "All materials listed", materials: materials });
     } catch (error: any) {
       console.error(error);
       res.status(500).json({ success: false, message: error.message });
@@ -67,6 +65,17 @@ export default class MaterialsController {
     try {
       await this.materialService.Delete(id);
       res.status(204).end();
+    } catch (error: any) {
+      console.error(error.message);
+      res.status(500).json({ success: false, message: error.message });
+    }
+  };
+
+  public TransferStock = async (req: Request, res: Response): Promise<void> => {
+    const { sourceMaterialId, targetMaterialId, quantity } = req.body;
+    try {
+      await this.materialService.TransferStock(sourceMaterialId, targetMaterialId, quantity);
+      res.status(200).json({ success: true, message: "Stock transferred" });
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ success: false, message: error.message });

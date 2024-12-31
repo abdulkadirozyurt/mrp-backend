@@ -1,9 +1,7 @@
 import mongoose, { Schema } from "mongoose";
-import IMaterial from "../Abstract/IMaterial";
-import ISupplier from "./../Abstract/ISupplier";
 
-const unitTypes = ["piece", "kg", "liter", "bale"];
-const entryTypes = ["purchase", "production", "return", "sales", "transfer", "usage"];
+import { MaterialEntryTypes, MaterialUnitTypes } from "../../Utilities/Enums/Material/materialEnums";
+import IMaterial from "../Abstract/IMaterial";
 
 const materialSchema = new Schema<IMaterial>(
   {
@@ -13,7 +11,7 @@ const materialSchema = new Schema<IMaterial>(
       type: String,
       required: true,
       lowercase: true,
-      enum: unitTypes,
+      enum: Object.values(MaterialUnitTypes),
     },
     reorderLevel: { type: Number, default: 0 },
     price: { type: Number },
@@ -26,7 +24,7 @@ const materialSchema = new Schema<IMaterial>(
     suppliers: [{ type: mongoose.Schema.Types.ObjectId, ref: "Supplier", required: false }],
     entryType: {
       type: String,
-      enum: entryTypes,
+      enum: Object.values(MaterialEntryTypes),
       required: true,
       lowercase: true,
     },

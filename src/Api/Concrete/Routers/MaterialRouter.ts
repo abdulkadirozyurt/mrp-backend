@@ -6,9 +6,11 @@ const router = express.Router();
 
 const materialsController = iocContainer.resolve(MaterialsController);
 
-router.get("/", materialsController.GetAll);
-router.post("/",materialsController.Create);
-router.put("/",materialsController.Update);
-router.delete("/",materialsController.Delete);
+router.get("/",  materialsController.GetAll);
+router.post("/", materialsController.Create);
+router.post("/id", materialsController.GetById);
+router.post("/transfer",  materialsController.TransferStock);
+router.put("/", materialsController.Update);
+router.post("/", materialsController.Delete);
 
 export default router;

@@ -2,7 +2,7 @@ import { FilterQuery } from "mongoose";
 import ISupplier from "../../Entities/Abstract/ISupplier";
 import ISupplierService from "../Abstract/ISupplierService";
 import { inject, injectable } from "tsyringe";
-import TYPES from "../../Api/IoC/Types";
+import TYPES from "../../Api/IoC/ContainerTypes";
 import ISupplierDal from "../../DataAccess/Abstract/ISupplierDal";
 
 @injectable()

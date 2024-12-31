@@ -1,17 +1,21 @@
 import mongoose, { Schema } from "mongoose";
 import { IOrder } from "../Abstract/IOrder";
-
-const statusTypes = ["pending", "completed", "cancelled"];
+import { OrderStatusTypes } from "../../Utilities/Enums/Order/orderEnums";
 
 const orderSchema = new Schema<IOrder>(
   {
-    status: { type: String, required: true, enum: statusTypes, default: "pending" },
     products: [
       {
-        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
         quantity: { type: Number, required: true },
       },
     ],
+    status: {
+      type: String,
+      required: true,
+      enum: Object.values(OrderStatusTypes),
+      default: OrderStatusTypes.PENDING,
+    },
   },
   { timestamps: true }
 );

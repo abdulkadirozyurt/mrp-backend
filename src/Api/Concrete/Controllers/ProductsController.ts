@@ -3,7 +3,7 @@ import { inject, injectable } from "tsyringe";
 import IMaterialService from "../../../Business/Abstract/IMaterialService";
 import IProductService from "../../../Business/Abstract/IProductService";
 import IProduct from "../../../Entities/Abstract/IProduct";
-import TYPES from "../../IoC/Types";
+import TYPES from "../../IoC/ContainerTypes";
 import mongoose from "mongoose";
 
 @injectable()
@@ -68,7 +68,7 @@ export default class ProductsController {
       }
 
       const updatedProduct = await this.productService.Update(id, product);
-      res.status(200).json({ success: true, message: "Product updated", data: updatedProduct });
+      res.status(200).json({ success: true, message: "Product updated", updatedProduct: updatedProduct });
     } catch (error: any) {
       console.error(error.message);
       res.status(500).json({ success: false, message: error.message });

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
-import TYPES from "../../IoC/Types";
+import TYPES from "../../IoC/ContainerTypes";
 import IUserService from "../../../Business/Abstract/IUserService";
 
 @injectable()

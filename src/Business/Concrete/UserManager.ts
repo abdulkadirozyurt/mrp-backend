@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import IUser from "../../Entities/Abstract/IUser";
 import IUserService from "../Abstract/IUserService";
-import TYPES from "../../Api/IoC/Types";
+import TYPES from "../../Api/IoC/ContainerTypes";
 import IUserDal from "../../DataAccess/Abstract/IUserDal";
 import { FilterQuery } from "mongoose";
 
