@@ -39,7 +39,6 @@ iocContainer.registerSingleton(ContainerTypes.MaterialsController, MaterialsCont
 iocContainer.registerSingleton(ContainerTypes.UsersController, UsersController);
 iocContainer.registerSingleton(ContainerTypes.AuthController, AuthController);
 iocContainer.registerSingleton(ContainerTypes.SuppliersController, SuppliersController);
-iocContainer.registerSingleton(ContainerTypes.OrdersController, OrdersController);
 // iocContainer.registerSingleton(ContainerTypes.InventoryMovementsController, InventoryMovementsController)
 
 
@@ -51,7 +50,6 @@ iocContainer.registerSingleton<IUserService>(ContainerTypes.IUserService, UserMa
 iocContainer.registerSingleton<IAuthService>(ContainerTypes.IAuthService, AuthManager);
 iocContainer.registerSingleton<ISupplierService>(ContainerTypes.ISupplierService, SupplierManager);
 iocContainer.registerSingleton<IInventoryMovementService>(ContainerTypes.IInventoryMovementService, InventoryMovementManager);
-iocContainer.registerSingleton<IOrderService>(ContainerTypes.IOrderService, OrderManager);
 
 //data access
 iocContainer.registerSingleton<IProductDal>(ContainerTypes.IProductDal, ProductDal);
@@ -59,6 +57,5 @@ iocContainer.registerSingleton<IMaterialDal>(ContainerTypes.IMaterialDal, Materi
 iocContainer.registerSingleton<IUserDal>(ContainerTypes.IUserDal, UserDal);
 iocContainer.registerSingleton<ISupplierDal>(ContainerTypes.ISupplierDal, SupplierDal);
 iocContainer.registerSingleton<IInventoryMovementDal>(ContainerTypes.IInventoryMovementDal, InventoryMovementDal);  
-iocContainer.registerSingleton<IOrderDal>(ContainerTypes.IOrderDal, OrderDal);  
 
 export default iocContainer;

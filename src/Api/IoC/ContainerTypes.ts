@@ -6,7 +6,6 @@ const ContainerTypes = {
   IAuthService: Symbol.for("IAuthService"),
   ISupplierService: Symbol.for("ISupplierService"),
   IInventoryMovementService: Symbol.for("IInventoryMovementService"),
-  IOrderService: Symbol.for("IOrderService"),
   ICustomerOrderService: Symbol.for("ICustomerOrderService"),
   ISupplierOrderService: Symbol.for("ISupplierOrderService"),
 
@@ -16,7 +15,6 @@ const ContainerTypes = {
   IUserDal: Symbol.for("IUserDal"),
   ISupplierDal: Symbol.for("ISupplierDal"),
   IInventoryMovementDal: Symbol.for("IInventoryMovementDal"),
-  IOrderDal: Symbol.for("IOrderDal"),
   ICustomerOrderDal: Symbol.for("ICustomerOrderDal"),
   ISupplierOrderDal: Symbol.for("ISupplierOrderDal"),
 
@@ -28,7 +26,6 @@ const ContainerTypes = {
   AuthController: Symbol.for("AuthController"),
   SuppliersController: Symbol.for("SuppliersController"),
   InventoryMovementsController: Symbol.for("InventoryMovementsController"),
-  OrdersController: Symbol.for("OrdersController"),
   CustomerOrdersController: Symbol.for("CustomerOrdersController"),
   SupplierOrdersController: Symbol.for("SupplierOrdersController"),
 };
