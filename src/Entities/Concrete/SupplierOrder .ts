@@ -6,7 +6,6 @@ import { Order } from "./Order";
 const supplierOrderSchema = new Schema<ISupplierOrder>({
   supplierId: { type: mongoose.Schema.Types.ObjectId, ref: "Supplier", required: true },
   warehouseId: { type: mongoose.Schema.Types.ObjectId, ref: "Warehouse", required: true },
-  deliveryDate: { type: Date, required: true },
   purchaseOrderNumber: { type: String, required: false },
 });
 
