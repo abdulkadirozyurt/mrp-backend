@@ -37,6 +37,11 @@ import SupplierOrderDal from "../../DataAccess/Concrete/Mongoose/SupplierOrderDa
 import ISupplierOrderDal from "../../DataAccess/Abstract/ISupplierOrderDal";
 import ICustomerOrderDal from "../../DataAccess/Abstract/ICustomerOrderDal";
 import CustomerOrderDal from "../../DataAccess/Concrete/Mongoose/CustomerOrderDal";
+import ICustomerService from "../../Business/Abstract/ICustomerService";
+import CustomerManager from "../../Business/Concrete/CustomerManager";
+import CustomerDal from "../../DataAccess/Concrete/Mongoose/CustomerDal";
+import ICustomerDal from "../../DataAccess/Abstract/ICustomerDal";
+import CustomersController from "../Concrete/Controllers/CustomersController";
 
 // singleton sadece bir kere oluşturulur ve her seferinde aynı nesne döner
 iocContainer.registerSingleton(ContainerTypes.ProductsController, ProductsController);
@@ -45,11 +50,11 @@ iocContainer.registerSingleton(ContainerTypes.UsersController, UsersController);
 iocContainer.registerSingleton(ContainerTypes.AuthController, AuthController);
 iocContainer.registerSingleton(ContainerTypes.SuppliersController, SuppliersController);
 iocContainer.registerSingleton(ContainerTypes.CustomerOrdersController, CustomerOrdersController);
-iocContainer.registerSingleton(ContainerTypes.SupplierOrdersController, SupplierOrdersController);  
+iocContainer.registerSingleton(ContainerTypes.SupplierOrdersController, SupplierOrdersController);
+iocContainer.registerSingleton(ContainerTypes.CustomersController, CustomersController);
+
 
 // iocContainer.registerSingleton(ContainerTypes.InventoryMovementsController, InventoryMovementsController)
-
-
 
 // business
 iocContainer.registerSingleton<IProductService>(ContainerTypes.IProductService, ProductManager);
@@ -60,16 +65,16 @@ iocContainer.registerSingleton<ISupplierService>(ContainerTypes.ISupplierService
 iocContainer.registerSingleton<IInventoryMovementService>(ContainerTypes.IInventoryMovementService, InventoryMovementManager);
 iocContainer.registerSingleton<ICustomerOrderService>(ContainerTypes.ICustomerOrderService, CustomerOrderManager);
 iocContainer.registerSingleton<ISupplierOrderService>(ContainerTypes.ISupplierOrderService, SupplierOrderManager);
-        
+iocContainer.registerSingleton<ICustomerService>(ContainerTypes.ICustomerService, CustomerManager);
 
 //data access
 iocContainer.registerSingleton<IProductDal>(ContainerTypes.IProductDal, ProductDal);
-iocContainer.registerSingleton<IMaterialDal>(ContainerTypes.IMaterialDal, MaterialDal);  
+iocContainer.registerSingleton<IMaterialDal>(ContainerTypes.IMaterialDal, MaterialDal);
 iocContainer.registerSingleton<IUserDal>(ContainerTypes.IUserDal, UserDal);
 iocContainer.registerSingleton<ISupplierDal>(ContainerTypes.ISupplierDal, SupplierDal);
-iocContainer.registerSingleton<IInventoryMovementDal>(ContainerTypes.IInventoryMovementDal, InventoryMovementDal);  
+iocContainer.registerSingleton<IInventoryMovementDal>(ContainerTypes.IInventoryMovementDal, InventoryMovementDal);
 iocContainer.registerSingleton<ICustomerOrderDal>(ContainerTypes.ICustomerOrderDal, CustomerOrderDal);
 iocContainer.registerSingleton<ISupplierOrderDal>(ContainerTypes.ISupplierOrderDal, SupplierOrderDal);
-
+iocContainer.registerSingleton<ICustomerDal>(ContainerTypes.ICustomerDal, CustomerDal);
 
 export default iocContainer;

@@ -11,6 +11,9 @@ import supplierRouter from "./src/Api/Concrete/Routers/SupplierRouter";
 import DbConfig from "./src/DataAccess/Concrete/Mongoose/Config/DbConfig";
 import customerOrdersRouter from "./src/Api/Concrete/Routers/CustomerOrdersRouter";
 import supplierOrdersRouter from "./src/Api/Concrete/Routers/SupplierOrdersRouter";
+import customerRouter from "./src/Api/Concrete/Routers/CustomerRouter";
+
+
 
 dotenv.config();
 
@@ -34,6 +37,7 @@ app.use("/api/materials", materialRouter);
 app.use("/api/suppliers", supplierRouter);
 app.use("/api/orders/customer-orders", customerOrdersRouter);
 app.use("/api/orders/supplier-orders", supplierOrdersRouter);
+app.use("/api/customers", customerRouter);
 
 async function startServer() {
   try {
