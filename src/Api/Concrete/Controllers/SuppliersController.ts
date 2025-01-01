@@ -5,16 +5,12 @@ import { Request, Response } from "express";
 
 @injectable()
 export default class SuppliersController {
-  constructor(
-    @inject(TYPES.ISupplierService) private readonly _supplierService: ISupplierService
-  ) {}
+  constructor(@inject(TYPES.ISupplierService) private readonly _supplierService: ISupplierService) {}
 
   public GetAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const suppliers = await this._supplierService.GetAll({}, ["materialsOfSupplied"]);
-      res
-        .status(200)
-        .json({ success: true, message: "All suppliers listed", suppliers: suppliers });
+      res.status(200).json({ success: true, message: "All suppliers listed", suppliers: suppliers });
     } catch (error: any) {
       console.error(error);
       res.status(500).json({ success: false, message: error.message });

@@ -2,7 +2,7 @@ import mongoose, { Document } from "mongoose";
 import IModel from "../../Core/Entities/Abstract/IModel";
 
 export default interface ISupplier extends IModel, Document {
-  name: string;
+  companyName: string;
   contactName: string;
   contactTitle: string;
   address: string;

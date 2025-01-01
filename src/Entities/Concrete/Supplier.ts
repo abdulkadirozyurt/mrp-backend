@@ -4,7 +4,7 @@ import ISupplier from "../Abstract/ISupplier";
 
 const supplierSchema = new Schema<ISupplier>(
   {
-    name: { type: String, required: true },
+    companyName: { type: String, required: true },
     contactName: String,
     contactTitle: String,
     address: String,
