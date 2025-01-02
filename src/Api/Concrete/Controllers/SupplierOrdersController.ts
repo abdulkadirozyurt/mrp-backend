@@ -13,7 +13,7 @@ export default class SupplierOrdersController {
 
   public async GetAll(req: Request, res: Response) {
     try {
-      const orders = await this.supplierOrderService.GetAll({}, ["products.productId"]);
+      const orders = await this.supplierOrderService.GetAll({}, ["materials.materialId", "supplierId"]);
       res.status(200).json({ success: true, message: "All supplier orders listed", orders });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
@@ -26,7 +26,7 @@ export default class SupplierOrdersController {
       return res.status(400).json({ success: false, message: "Order ID is required" });
     }
     try {
-      const order = await this.supplierOrderService.GetById(id, ["products.productId"]);
+      const order = await this.supplierOrderService.GetById(id, ["materials.materialId", "supplierId"]);
       if (order) {
         res.status(200).json({ success: true, message: "Supplier order details received", order });
       } else {
@@ -39,7 +39,7 @@ export default class SupplierOrdersController {
 
   public async Create(req: Request, res: Response) {
     const order: ISupplierOrder = req.body;
-    if (!order || !order.products || order.products.length === 0) {
+    if (!order || !order.materials || order.materials.length === 0) {
       return res.status(400).json({ success: false, message: "Order details are incomplete" });
     }
     try {

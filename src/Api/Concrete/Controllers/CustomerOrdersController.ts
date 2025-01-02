@@ -13,7 +13,7 @@ export default class CustomerOrdersController {
 
   public async GetAll(req: Request, res: Response) {
     try {
-      const orders = await this.customerOrderService.GetAll({}, ["products.productId"]);
+      const orders = await this.customerOrderService.GetAll({}, ["products.productId", "customerId"]);
       res.status(200).json({ success: true, message: "All customer orders listed", orders });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
@@ -26,7 +26,7 @@ export default class CustomerOrdersController {
       return res.status(400).json({ success: false, message: "Order ID is required" });
     }
     try {
-      const order = await this.customerOrderService.GetById(id, ["products.productId"]);
+      const order = await this.customerOrderService.GetById(id, ["products.productId", "customerId"]);
       if (order) {
         res.status(200).json({ success: true, message: "Customer order details received", order });
       } else {
