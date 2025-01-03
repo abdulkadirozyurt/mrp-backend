@@ -47,6 +47,7 @@ export default class MaterialsController {
 
   public Update = async (req: Request, res: Response): Promise<void> => {
     const { id, ...material } = req.body;
+
     try {
       const updatedMaterial = await this.materialService.Update(id, material);
       if (updatedMaterial) {

@@ -11,6 +11,6 @@ router.post("/", materialsController.Create);
 router.post("/id", materialsController.GetById);
 router.post("/transfer",  materialsController.TransferStock);
 router.put("/", materialsController.Update);
-router.post("/", materialsController.Delete);
+router.delete("/", materialsController.Delete);
 
 export default router;
