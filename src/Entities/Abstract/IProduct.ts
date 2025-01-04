@@ -6,5 +6,9 @@ export default interface IProduct extends IModel, Document {
   name: string;
   description: string;
   unitType: string;
-  billOfMaterials: IBillOfMaterials[];
+  // billOfMaterials: IBillOfMaterials[];
+  billOfMaterials:{
+    materialId: mongoose.Types.ObjectId;
+    quantity: number;
+  }
 }
