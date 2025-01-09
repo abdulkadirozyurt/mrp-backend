@@ -12,4 +12,3 @@ export default router;
 
 
 
-//////////// frontend ve backend kayıt işlemi doğrulamaları kontrolleri
