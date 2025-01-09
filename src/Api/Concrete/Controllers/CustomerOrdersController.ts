@@ -51,6 +51,8 @@ export default class CustomerOrdersController {
   }
 
   public async Update(req: Request, res: Response) {
+    console.log("req.body --------", req.body);
+    
     const { id, ...order } = req.body;
     if (!id || !order) {
       return res.status(400).json({ success: false, message: "Order ID and update details are required" });
