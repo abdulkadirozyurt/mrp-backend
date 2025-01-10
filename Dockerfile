@@ -2,7 +2,7 @@
 FROM node:20
 
 # Çalışma dizinini ayarla
-WORKDIR /
+WORKDIR /app
 
 # package.json ve package-lock.json dosyalarını kopyala
 COPY package*.json ./

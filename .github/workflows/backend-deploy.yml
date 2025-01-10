@@ -35,12 +35,6 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
-      - name: Cleanup Docker Images and Volumes
-        run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
-          docker system prune -af --volumes || true
-          EOFMARK
-
       - name: Deploy to VDS
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
@@ -48,22 +42,20 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           VDS_IP: ${{ secrets.VDS_IP }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
-          mkdir -p /var/www/backend
-          echo "PORT=5000" > /var/www/backend/.env
-          echo "MONGO_URI=$MONGO_URI" >> /var/www/backend/.env
-          echo "DB_NAME=$DB_NAME" >> /var/www/backend/.env
-          echo "CLIENT_URL=http://$VDS_IP" >> /var/www/backend/.env
-          echo "JWT_SECRET=$JWT_SECRET" >> /var/www/backend/.env
-
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << 'EOFMARK'
           docker pull $DOCKER_USERNAME/my-backend-image:latest
           docker stop backend-container || true
           docker rm backend-container || true
           docker run -d \
             --name backend-container \
             --restart always \
-            --env-file /var/www/backend/.env \
+            --env PORT=$PORT \
+            --env MONGO_URI=$MONGO_URI \
+            --env DB_NAME=$DB_NAME \
+            --env CLIENT_URL=http://$VDS_IP \
+            --env JWT_SECRET=$JWT_SECRET \
             -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
           EOFMARK
