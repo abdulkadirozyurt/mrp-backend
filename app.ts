@@ -13,8 +13,6 @@ import customerOrdersRouter from "./src/Api/Concrete/Routers/CustomerOrdersRoute
 import supplierOrdersRouter from "./src/Api/Concrete/Routers/SupplierOrdersRouter";
 import customerRouter from "./src/Api/Concrete/Routers/CustomerRouter";
 
-
-
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;

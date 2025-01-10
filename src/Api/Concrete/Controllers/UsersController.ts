@@ -7,16 +7,16 @@ import IUserService from "../../../Business/Abstract/IUserService";
 export default class UsersController {
   constructor(@inject(TYPES.IUserService) private _userService: IUserService) {}
 
-  async GetAll(req: Request, res: Response): Promise<void> {
+  GetAll = async (req: Request, res: Response): Promise<void> => {
     try {
       const users = await this._userService.GetAll();
       res.json(users);
     } catch (error) {
       res.status(500).json({ message: "Error retrieving users" });
     }
-  }
+  };
 
-  async GetById(req: Request, res: Response): Promise<void> {
+  GetById = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.body;
     try {
       const user = await this._userService.GetById(id);
@@ -28,18 +28,18 @@ export default class UsersController {
     } catch (error) {
       res.status(500).json({ message: "Error retrieving user" });
     }
-  }
+  };
 
-  async Create(req: Request, res: Response): Promise<void> {
+  Create = async (req: Request, res: Response): Promise<void> => {
     try {
       const newUser = await this._userService.Create(req.body);
       res.status(201).json(newUser);
     } catch (error) {
       res.status(500).json({ message: "Error creating user" });
     }
-  }
+  };
 
-  async Update(req: Request, res: Response): Promise<void> {
+  Update = async (req: Request, res: Response): Promise<void> => {
     const { id, ...user } = req.body;
 
     try {
@@ -52,9 +52,9 @@ export default class UsersController {
     } catch (error) {
       res.status(500).json({ message: "Error updating user" });
     }
-  }
+  };
 
-  async Delete(req: Request, res: Response): Promise<void> {
+  Delete = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.body;
 
     try {
@@ -63,7 +63,5 @@ export default class UsersController {
     } catch (error) {
       res.status(500).json({ message: "Error deleting user" });
     }
-  }
+  };
 }
-
-

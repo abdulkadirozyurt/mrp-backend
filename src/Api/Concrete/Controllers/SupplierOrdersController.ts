@@ -11,16 +11,16 @@ export default class SupplierOrdersController {
     private readonly supplierOrderService: ISupplierOrderService
   ) {}
 
-  public async GetAll(req: Request, res: Response) {
+  GetAll = async (req: Request, res: Response) => {
     try {
       const orders = await this.supplierOrderService.GetAll({}, ["materials.materialId", "supplierId"]);
       res.status(200).json({ success: true, message: "All supplier orders listed", orders });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async GetById(req: Request, res: Response) {
+  GetById = async (req: Request, res: Response) => {
     const { id } = req.body;
     if (!id) {
       return res.status(400).json({ success: false, message: "Order ID is required" });
@@ -35,9 +35,9 @@ export default class SupplierOrdersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async Create(req: Request, res: Response) {
+  Create = async (req: Request, res: Response) => {
     const order: ISupplierOrder = req.body;
     if (!order || !order.materials || order.materials.length === 0) {
       return res.status(400).json({ success: false, message: "Order details are incomplete" });
@@ -48,9 +48,9 @@ export default class SupplierOrdersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async Update(req: Request, res: Response) {
+  Update = async (req: Request, res: Response) => {
     const { id, ...order } = req.body;
     if (!id || !order) {
       return res.status(400).json({ success: false, message: "Order ID and update details are required" });
@@ -61,9 +61,9 @@ export default class SupplierOrdersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async Delete(req: Request, res: Response) {
+  Delete = async (req: Request, res: Response) => {
     const { id } = req.body;
     if (!id) {
       return res.status(400).json({ success: false, message: "Order ID is required" });
@@ -74,5 +74,5 @@ export default class SupplierOrdersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 }

@@ -8,7 +8,7 @@ import ContainerTypes from "../../IoC/ContainerTypes";
 export default class CustomersController {
   constructor(@inject(ContainerTypes.ICustomerService) private readonly _customerService: ICustomerService) {}
 
-  public async GetAll(req: Request, res: Response): Promise<void> {
+  public GetAll = async (req: Request, res: Response): Promise<void> => {
     console.log("_customerService:", this._customerService);
     try {
       const customers = await this._customerService.GetAll();
@@ -16,9 +16,9 @@ export default class CustomersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
-  }
+  };
 
-  public async GetById(req: Request, res: Response): Promise<void> {
+  public GetById = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.body;
 
     if (!id) {
@@ -36,9 +36,9 @@ export default class CustomersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: "Internal server error", error: error.message });
     }
-  }
+  };
 
-  public async Create(req: Request, res: Response): Promise<void> {
+  public Create = async (req: Request, res: Response): Promise<void> => {
     const customer: ICustomer = req.body;
 
     if (!customer || !customer.companyName || !customer.contactName || !customer.email || !customer.phone || !customer.address) {
@@ -52,9 +52,9 @@ export default class CustomersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async Update(req: Request, res: Response): Promise<void> {
+  public Update = async (req: Request, res: Response): Promise<void> => {
     const { id, ...customer } = req.body;
 
     if (!id || !customer) {
@@ -72,9 +72,9 @@ export default class CustomersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async Delete(req: Request, res: Response): Promise<void> {
+  public Delete = async (req: Request, res: Response): Promise<void> => {
     const { id } = req.body;
 
     if (!id) {
@@ -94,5 +94,5 @@ export default class CustomersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 }

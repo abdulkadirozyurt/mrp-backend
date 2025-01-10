@@ -11,16 +11,16 @@ export default class CustomerOrdersController {
     private readonly customerOrderService: ICustomerOrderService
   ) {}
 
-  public async GetAll(req: Request, res: Response) {
+  public GetAll = async (req: Request, res: Response) => {
     try {
       const orders = await this.customerOrderService.GetAll({}, ["products.productId", "customerId"]);
       res.status(200).json({ success: true, message: "All customer orders listed", orders });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async GetById(req: Request, res: Response) {
+  public GetById = async (req: Request, res: Response) => {
     const { id } = req.body;
     if (!id) {
       return res.status(400).json({ success: false, message: "Order ID is required" });
@@ -35,9 +35,9 @@ export default class CustomerOrdersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async Create(req: Request, res: Response) {
+  public Create = async (req: Request, res: Response) => {
     const order: ICustomerOrder = req.body;
     if (!order || !order.products || order.products.length === 0) {
       return res.status(400).json({ success: false, message: "Order details are incomplete" });
@@ -48,11 +48,11 @@ export default class CustomerOrdersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async Update(req: Request, res: Response) {
+  public Update = async (req: Request, res: Response) => {
     console.log("req.body --------", req.body);
-    
+
     const { id, ...order } = req.body;
     if (!id || !order) {
       return res.status(400).json({ success: false, message: "Order ID and update details are required" });
@@ -63,9 +63,9 @@ export default class CustomerOrdersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 
-  public async Delete(req: Request, res: Response) {
+  public Delete = async (req: Request, res: Response) => {
     const { id } = req.body;
     if (!id) {
       return res.status(400).json({ success: false, message: "Order ID is required" });
@@ -76,5 +76,5 @@ export default class CustomerOrdersController {
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
     }
-  }
+  };
 }

@@ -29,7 +29,6 @@ export default class ProductsController {
 
   public GetById = async (req: Request, res: Response) => {
     const { id } = req.body;
-    // const objectId = new mongoose.Schema.Types.ObjectId(id);
     try {
       const product = await this.productService.GetById(id, ["billOfMaterials.materialId"]);
       if (!product) {
@@ -82,13 +81,6 @@ export default class ProductsController {
       if (!existingProduct) {
         return res.status(404).json({ success: false, message: "Product not found" });
       }
-
-      // if (existingProduct.billOfMaterials.length > 0) {
-      //   return res.status(400).json({
-      //     success: false,
-      //     message: "Product cannot be deleted because it is linked to materials.",
-      //   });
-      // }
 
       await this.productService.Delete(id);
       return res.status(204).json({ success: true, message: "Product deleted" });

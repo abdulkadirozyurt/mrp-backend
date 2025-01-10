@@ -7,8 +7,6 @@ import { UserRoles } from "../../../Utilities/Enums/User/UserRoles";
 
 const router = express.Router();
 const customersController = iocContainer.resolve(CustomersController);
-console.log(customersController);
-
 
 router.get("/", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), customersController.GetAll);
 router.post("/id", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), customersController.GetById);
