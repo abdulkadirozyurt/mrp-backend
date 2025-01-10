@@ -50,6 +50,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
+          mkdir -p /var/www/backend
           echo "PORT=5000" > /var/www/backend/.env
           echo "MONGO_URI=$MONGO_URI" >> /var/www/backend/.env
           echo "DB_NAME=$DB_NAME" >> /var/www/backend/.env
