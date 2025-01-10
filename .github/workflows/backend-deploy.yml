@@ -26,19 +26,13 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.VDS_IP }} >> ~/.ssh/known_hosts
 
-      - name: Build Docker Image
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PORT: ${{ secrets.PORT }}
-          CLIENT_URL: http://${{ secrets.VDS_IP }}
+      - name: Build Docker Image        
         run: |
-          echo "MONGO_URI=$MONGO_URI" > .env
-          echo "DB_NAME=$DB_NAME" >> .env
-          echo "JWT_SECRET=$JWT_SECRET" >> .env
-          echo "PORT=$PORT" >> .env
-          echo "CLIENT_URL=$CLIENT_URL" >> .env
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "CLIENT_URL=http://${{ secrets.VDS_IP }}" >> .env
           docker build --no-cache --platform=linux/amd64 -t my-backend-image .
           docker tag my-backend-image ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
