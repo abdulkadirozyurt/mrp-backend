@@ -27,7 +27,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.VDS_IP }} >> ~/.ssh/known_hosts
 
       - name: Build Docker Image        
-        run: |
+        run: |  
           echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
@@ -49,10 +49,6 @@ jobs:
       - name: Deploy to VDS
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PORT: ${{ secrets.PORT }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
           docker pull $DOCKER_USERNAME/my-backend-image:latest &&
@@ -61,7 +57,6 @@ jobs:
           docker run -d \
             --name backend-container \
             --restart always \
-            --env-file /app/.env \
             -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
           EOFMARK
