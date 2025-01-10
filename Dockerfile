@@ -10,6 +10,8 @@ COPY package*.json ./
 # Bağımlılıkları yükle
 RUN npm install
 
+COPY .env .env
+
 # Tüm dosyaları kopyala
 COPY . .
 
