@@ -44,18 +44,13 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PORT: ${{ secrets.PORT }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << 'EOFMARK'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
           docker pull $DOCKER_USERNAME/my-backend-image:latest &&
           docker stop backend-container || true &&
           docker rm backend-container || true &&
           docker run -d \
             --name backend-container \
-            --restart always \
-            --env PORT=$PORT \
-            --env MONGO_URI=$MONGO_URI \
-            --env DB_NAME=$DB_NAME \
-            --env CLIENT_URL=http://$VDS_IP \
-            --env JWT_SECRET=$JWT_SECRET \
+            --restart always \            
             -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
           EOFMARK
