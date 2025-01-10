@@ -1,14 +1,16 @@
 import express from "express";
 import iocContainer from "../../IoC/Container";
 import SuppliersController from "../Controllers/SuppliersController";
+import { jwtAuth } from "../middlewares/jwtAuth";
+import { authorize } from "../middlewares/authorize";
+import { UserRoles } from "../../../Utilities/Enums/User/UserRoles";
 
 const router = express.Router();
-
 const suppliersController = iocContainer.resolve(SuppliersController);
 
-router.get("/", suppliersController.GetAll);
-router.post("/", suppliersController.Create);
-router.put("/", suppliersController.Update);
-router.delete("/", suppliersController.Delete);
+router.get("/", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), suppliersController.GetAll);
+router.post("/", jwtAuth, authorize([UserRoles.Admin]), suppliersController.Create);
+router.put("/", jwtAuth, authorize([UserRoles.Admin]), suppliersController.Update);
+router.delete("/", jwtAuth, authorize([UserRoles.Admin]), suppliersController.Delete);
 
 export default router;

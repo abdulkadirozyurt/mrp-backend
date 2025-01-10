@@ -1,7 +1,7 @@
-import TYPES from "../../IoC/ContainerTypes";
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import IAuthService from "../../../Business/Abstract/IAuthService";
+import TYPES from "../../IoC/ContainerTypes";
 @injectable()
 export default class AuthController {
   constructor(@inject(TYPES.IAuthService) private _authService: IAuthService) {}

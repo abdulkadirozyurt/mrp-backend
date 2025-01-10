@@ -1,26 +1,17 @@
 import express from "express";
 import iocContainer from "../../IoC/Container";
 import ProductsController from "../Controllers/ProductsController";
+import { jwtAuth } from "../middlewares/jwtAuth";
+import { authorize } from "../middlewares/authorize";
+import { UserRoles } from "../../../Utilities/Enums/User/UserRoles";
 
 const router = express.Router();
-
-// const productsController = new ProductsController(new ProductManager(new ProductDal()));
 const productsController = iocContainer.resolve(ProductsController);
 
-router.get("/", (req, res) => {productsController.GetAll(req, res)});
-
-router.get("/id", (req, res) => {productsController.GetById(req, res)});
-
-router.post("/", (req, res) => {
-  productsController.Create(req, res);
-});
-
-router.put("/", (req, res) => {
-  productsController.Update(req, res);
-});
-
-router.delete("/", (req, res) => {
-  productsController.Delete(req, res);
-});
+router.get("/", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), productsController.GetAll);
+router.get("/id", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), productsController.GetById);
+router.post("/", jwtAuth, authorize([UserRoles.Admin]), productsController.Create);
+router.put("/", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), productsController.Update);
+router.delete("/", jwtAuth, authorize([UserRoles.Admin]), productsController.Delete);
 
 export default router;
