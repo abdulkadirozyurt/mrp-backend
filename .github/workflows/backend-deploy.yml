@@ -45,7 +45,7 @@ jobs:
           PORT: ${{ secrets.PORT }}
           CLIENT_URL: ${{ secrets.CLIENT_URL }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << 'EOFMARK'
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
           echo "
           docker pull $DOCKER_USERNAME/my-backend-image:latest
           docker stop backend-container || true
