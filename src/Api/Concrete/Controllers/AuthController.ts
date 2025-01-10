@@ -37,6 +37,7 @@ export default class AuthController {
       res.status(401).json({ message: "Invalid credentials" });
     }
   };
+  
   public Logout = (req: Request, res: Response): void => {
     res.status(200).json({ message: "Logged out successfully" });
   };

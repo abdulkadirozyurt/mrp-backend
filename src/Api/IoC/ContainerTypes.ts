@@ -1,37 +1,37 @@
 const ContainerTypes = {
   // Business Layer
-  IProductService: Symbol.for("IProductService"),
-  IMaterialService: Symbol.for("IMaterialService"),
   IUserService: Symbol.for("IUserService"),
   IAuthService: Symbol.for("IAuthService"),
+  IProductService: Symbol.for("IProductService"),
+  IMaterialService: Symbol.for("IMaterialService"),
   ISupplierService: Symbol.for("ISupplierService"),
-  IInventoryMovementService: Symbol.for("IInventoryMovementService"),
+  ICustomerService: Symbol.for("ICustomerService"),
   ICustomerOrderService: Symbol.for("ICustomerOrderService"),
   ISupplierOrderService: Symbol.for("ISupplierOrderService"),
-  ICustomerService: Symbol.for("ICustomerService"),
+  IInventoryMovementService: Symbol.for("IInventoryMovementService"),
 
 
   // Data Access Layer
+  IUserDal: Symbol.for("IUserDal"),
   IProductDal: Symbol.for("IProductDal"),
   IMaterialDal: Symbol.for("IMaterialDal"),
-  IUserDal: Symbol.for("IUserDal"),
   ISupplierDal: Symbol.for("ISupplierDal"),
-  IInventoryMovementDal: Symbol.for("IInventoryMovementDal"),
+  ICustomerDal: Symbol.for("ICustomerDal"),
   ICustomerOrderDal: Symbol.for("ICustomerOrderDal"),
   ISupplierOrderDal: Symbol.for("ISupplierOrderDal"),
-  ICustomerDal: Symbol.for("ICustomerDal"),
+  IInventoryMovementDal: Symbol.for("IInventoryMovementDal"),
 
 
   // Controllers
+  AuthController: Symbol.for("AuthController"),
+  UsersController: Symbol.for("UsersController"),
   ProductsController: Symbol.for("ProductsController"),
   MaterialsController: Symbol.for("MaterialsController"),
-  UsersController: Symbol.for("UsersController"),
-  AuthController: Symbol.for("AuthController"),
   SuppliersController: Symbol.for("SuppliersController"),
-  InventoryMovementsController: Symbol.for("InventoryMovementsController"),
+  CustomersController: Symbol.for("CustomersController"),
   CustomerOrdersController: Symbol.for("CustomerOrdersController"),
   SupplierOrdersController: Symbol.for("SupplierOrdersController"),
-  CustomersController: Symbol.for("CustomersController"),
+  InventoryMovementsController: Symbol.for("InventoryMovementsController"),
 };
 
 export default ContainerTypes;

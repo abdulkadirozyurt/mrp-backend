@@ -9,6 +9,7 @@ export default class CustomersController {
   constructor(@inject(ContainerTypes.ICustomerService) private readonly _customerService: ICustomerService) {}
 
   public async GetAll(req: Request, res: Response): Promise<void> {
+    console.log("_customerService:", this._customerService);
     try {
       const customers = await this._customerService.GetAll();
       res.status(200).json({ success: true, message: "All customers listed", customers });
