@@ -27,7 +27,16 @@ jobs:
           ssh-keyscan -H ${{ secrets.VDS_IP }} >> ~/.ssh/known_hosts
 
       - name: Build Docker Image
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          PORT: ${{ secrets.PORT }}
         run: |
+          echo "MONGO_URI=$MONGO_URI" > .env
+          echo "DB_NAME=$DB_NAME" >> .env
+          echo "JWT_SECRET=$JWT_SECRET" >> .env
+          echo "PORT=$PORT" >> .env
           docker build --no-cache --platform=linux/amd64 -t my-backend-image .
           docker tag my-backend-image ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
@@ -35,12 +44,17 @@ jobs:
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
+      - name: Cleanup Docker Images and Volumes
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
+          docker system prune -af --volumes || true
+          EOFMARK
+
       - name: Deploy to VDS
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           MONGO_URI: ${{ secrets.MONGO_URI }}
           DB_NAME: ${{ secrets.DB_NAME }}
-          VDS_IP: ${{ secrets.VDS_IP }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PORT: ${{ secrets.PORT }}
         run: |
@@ -50,7 +64,8 @@ jobs:
           docker rm backend-container || true &&
           docker run -d \
             --name backend-container \
-            --restart always \            
+            --restart always \
+            --env-file /app/.env \
             -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
           EOFMARK
