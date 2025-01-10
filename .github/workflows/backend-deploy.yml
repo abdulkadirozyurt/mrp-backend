@@ -51,11 +51,11 @@ jobs:
           docker run -d \\
             --name backend-container \\
             --restart always \\
-            --e PORT=$PORT \\
-            --e MONGO_URI=$MONGO_URI \\
-            --e DB_NAME=$DB_NAME \\
-            --e CLIENT_URL=http://$VDS_IP \\
-            --e JWT_SECRET=$JWT_SECRET \\
+            -e PORT=$PORT \\
+            -e MONGO_URI=$MONGO_URI \\
+            -e DB_NAME=$DB_NAME \\
+            -e CLIENT_URL=http://$VDS_IP \\
+            -e JWT_SECRET=$JWT_SECRET \\
             -p 5000:5000 \\
             $DOCKER_USERNAME/my-backend-image:latest
           EOFMARK
