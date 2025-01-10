@@ -8,7 +8,8 @@ const authController = iocContainer.resolve(AuthController);
 
 router.post("/register", authController.Register);
 router.post("/login", authController.Login);
-router.post("/logout", jwtAuth, authController.Logout);
+// router.post("/logout", jwtAuth, authController.Logout);
+router.post("/logout",  authController.Logout);
 
 
 export default router;
