@@ -29,13 +29,14 @@ jobs:
       - name: Build Docker Image
         run: |
           docker build --no-cache --platform=linux/amd64 \
-            --build-arg PORT=5000 \
+            --build-arg PORT=${{ secrets.PORT }} \
             --build-arg MONGO_URI=${{ secrets.MONGO_URI }} \
             --build-arg DB_NAME=${{ secrets.DB_NAME }} \
             --build-arg CLIENT_URL=http://${{ secrets.VDS_IP }} \
             --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
             -t my-backend-image .
           docker tag my-backend-image ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
+
 
       - name: Push Docker Image to DockerHub
         run: |
