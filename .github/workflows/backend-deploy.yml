@@ -28,7 +28,13 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build --no-cache --platform=linux/amd64 -t my-backend-image .
+          docker build --no-cache --platform=linux/amd64 \
+            --build-arg PORT=5000 \
+            --build-arg MONGO_URI=${{ secrets.MONGO_URI }} \
+            --build-arg DB_NAME=${{ secrets.DB_NAME }} \
+            --build-arg CLIENT_URL=http://${{ secrets.VDS_IP }} \
+            --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} \
+            -t my-backend-image .
           docker tag my-backend-image ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
       - name: Push Docker Image to DockerHub
@@ -44,29 +50,22 @@ jobs:
       - name: Deploy to VDS
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          VDS_IP: ${{ secrets.VDS_IP }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
-          mkdir -p /var/www/backend
-          echo "PORT=5000" > /var/www/backend/.env
-          echo "MONGO_URI=$MONGO_URI" >> /var/www/backend/.env
-          echo "DB_NAME=$DB_NAME" >> /var/www/backend/.env
-          echo "CLIENT_URL=http://$VDS_IP" >> /var/www/backend/.env
-          echo "JWT_SECRET=$JWT_SECRET" >> /var/www/backend/.env
-
           docker pull $DOCKER_USERNAME/my-backend-image:latest
           docker stop backend-container || true
           docker rm backend-container || true
           docker run -d \
             --name backend-container \
             --restart always \
-            --env-file /var/www/backend/.env \
             -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
           EOFMARK
+
+
+
+
+
 
 # name: Deploy Backend
 
