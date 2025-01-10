@@ -45,23 +45,20 @@ jobs:
           PORT: ${{ secrets.PORT }}
           CLIENT_URL: ${{ secrets.CLIENT_URL }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << EOFMARK
-          echo "
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa root@${{ secrets.VDS_IP }} << 'EOFMARK'
           docker pull $DOCKER_USERNAME/my-backend-image:latest
           docker stop backend-container || true
           docker rm backend-container || true
-          docker run -d \\
-            --name backend-container \\
-            --restart always \\
-            -e PORT=$PORT \\
-            -e MONGO_URI=$MONGO_URI \\
-            -e DB_NAME=$DB_NAME \\
-            -e CLIENT_URL=$CLIENT_URL \\
-            -e JWT_SECRET=$JWT_SECRET \\
-            -p 5000:5000 \\
+          docker run -d \
+            --name backend-container \
+            --restart always \
+            --env PORT=$PORT \
+            --env MONGO_URI=$MONGO_URI \
+            --env DB_NAME=$DB_NAME \
+            --env CLIENT_URL=$CLIENT_URL \
+            --env JWT_SECRET=$JWT_SECRET \
+            -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
-          " > deploy-backend.sh
-          bash deploy-backend.sh
           EOFMARK
 
 # name: Deploy Backend
