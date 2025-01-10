@@ -20,9 +20,15 @@ const UserSchema = new Schema<IUser>(
     employeeCode: { type: String, required: true, unique: true },
     role: {
       type: String,
-      enum: ["user", "admin"],
+      enum: [
+        "admin",
+        "production_planner",
+        "sales_staff",
+        "procurement_manager",
+        "viewer",
+      ],
       required: true,
-      default: "user",
+      default: "viewer",
       lowercase: true,
     },
   },
