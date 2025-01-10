@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
+import TYPES from "../../IoC/ContainerTypes";
 import { inject, injectable } from "tsyringe";
 import IAuthService from "../../../Business/Abstract/IAuthService";
-import TYPES from "../../IoC/ContainerTypes";
 @injectable()
 export default class AuthController {
   constructor(@inject(TYPES.IAuthService) private _authService: IAuthService) {}
