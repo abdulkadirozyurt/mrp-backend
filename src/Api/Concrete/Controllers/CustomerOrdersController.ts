@@ -1,8 +1,8 @@
-import { inject, injectable } from "tsyringe";
 import { Request, Response } from "express";
-import ICustomerOrderService from "../../../Business/Abstract/ICustomerOrderService";
-import ICustomerOrder from "../../../Entities/Abstract/ICustomerOrder";
+import { inject, injectable } from "tsyringe";
 import ContainerTypes from "../../IoC/ContainerTypes";
+import ICustomerOrder from "../../../Entities/Abstract/ICustomerOrder";
+import ICustomerOrderService from "../../../Business/Abstract/ICustomerOrderService";
 
 @injectable()
 export default class CustomerOrdersController {
