@@ -1,5 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import IUser from "../Abstract/IUser";
+import { UserRoles } from "../../Utilities/Enums/User/UserRoles";
 
 const UserSchema = new Schema<IUser>(
   {
@@ -20,13 +21,7 @@ const UserSchema = new Schema<IUser>(
     employeeCode: { type: String, required: true, unique: true },
     role: {
       type: String,
-      enum: [
-        "admin",
-        "production_planner",
-        "sales_staff",
-        "procurement_manager",
-        "viewer",
-      ],
+      enum: UserRoles,
       required: true,
       default: "viewer",
       lowercase: true,
