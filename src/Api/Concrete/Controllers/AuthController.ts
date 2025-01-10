@@ -8,15 +8,11 @@ export default class AuthController {
   constructor(@inject(TYPES.IAuthService) private _authService: IAuthService) {}
 
   public Register = async (req: Request, res: Response): Promise<void> => {
-
     try {
       req.body.phoneNumber = req.body.phoneNumber || null;
       const token = await this._authService.Register(req.body);
-
       const decodedToken: any = jwt.verify(token, process.env.JWT_SECRET as string);
       res.status(201).json({ token, role: decodedToken.role }); // Rolü de ekleyerek döndür
-      console.log(token, decodedToken.role);
-      
     } catch (error: any) {
       res.status(500).json(error.message);
     }
