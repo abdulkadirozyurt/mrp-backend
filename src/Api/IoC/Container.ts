@@ -42,6 +42,7 @@ import CustomerManager from "../../Business/Concrete/CustomerManager";
 import CustomerDal from "../../DataAccess/Concrete/Mongoose/CustomerDal";
 import ICustomerDal from "../../DataAccess/Abstract/ICustomerDal";
 import CustomersController from "../Concrete/Controllers/CustomersController";
+import MrpController from "../Concrete/Controllers/MrpController";
 
 // singleton sadece bir kere oluşturulur ve her seferinde aynı nesne döner
 iocContainer.registerSingleton(ContainerTypes.AuthController, AuthController);
@@ -52,7 +53,7 @@ iocContainer.registerSingleton(ContainerTypes.SuppliersController, SuppliersCont
 iocContainer.registerSingleton(ContainerTypes.CustomersController, CustomersController);
 iocContainer.registerSingleton(ContainerTypes.CustomerOrdersController, CustomerOrdersController);
 iocContainer.registerSingleton(ContainerTypes.SupplierOrdersController, SupplierOrdersController);
-
+iocContainer.registerSingleton(ContainerTypes.MrpController, MrpController);
 
 // iocContainer.registerSingleton(ContainerTypes.InventoryMovementsController, InventoryMovementsController)
 

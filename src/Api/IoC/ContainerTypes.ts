@@ -32,6 +32,7 @@ const ContainerTypes = {
   CustomerOrdersController: Symbol.for("CustomerOrdersController"),
   SupplierOrdersController: Symbol.for("SupplierOrdersController"),
   InventoryMovementsController: Symbol.for("InventoryMovementsController"),
+  MrpController: Symbol.for("MrpController"),
 };
 
 export default ContainerTypes;
