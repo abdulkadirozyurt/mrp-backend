@@ -87,7 +87,7 @@ export default class AuthManager implements IAuthService {
       throw new Error("JWT_SECRET is not defined");
     }
     const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "1w",
     });
     return token;
   }
