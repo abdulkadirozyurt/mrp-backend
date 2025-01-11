@@ -7,16 +7,16 @@ import IUserService from "../../../Business/Abstract/IUserService";
 export default class UsersController {
   constructor(@inject(TYPES.IUserService) private _userService: IUserService) {}
 
-  GetAll = async (req: Request, res: Response): Promise<void> => {
+  GetAll = async (req: Request, res: Response) => {
     try {
       const users = await this._userService.GetAll();
-      res.json(users);
+      return res.status(200).json({success: true, message: "All users listed", users: users});
     } catch (error) {
-      res.status(500).json({ message: "Error retrieving users" });
+      return res.status(500).json({ message: "Error retrieving users" });
     }
   };
 
-  GetById = async (req: Request, res: Response): Promise<void> => {
+  GetById = async (req: Request, res: Response)=> {
     const { id } = req.body;
     try {
       const user = await this._userService.GetById(id);
@@ -30,7 +30,7 @@ export default class UsersController {
     }
   };
 
-  Create = async (req: Request, res: Response): Promise<void> => {
+  Create = async (req: Request, res: Response) => {
     try {
       const newUser = await this._userService.Create(req.body);
       res.status(201).json(newUser);
@@ -39,7 +39,7 @@ export default class UsersController {
     }
   };
 
-  Update = async (req: Request, res: Response): Promise<void> => {
+  Update = async (req: Request, res: Response) => {
     const { id, ...user } = req.body;
 
     try {
@@ -54,7 +54,7 @@ export default class UsersController {
     }
   };
 
-  Delete = async (req: Request, res: Response): Promise<void> => {
+  Delete = async (req: Request, res: Response) => {
     const { id } = req.body;
 
     try {

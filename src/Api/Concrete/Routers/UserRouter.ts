@@ -8,10 +8,10 @@ import { UserRoles } from "../../../Utilities/Enums/User/UserRoles";
 const router = express.Router();
 const usersController = iocContainer.resolve(UsersController);
 
-router.get("/", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), usersController.GetAll);
-router.get("/id", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager, UserRoles.User]), usersController.GetById);
+router.get("/", jwtAuth, authorize([UserRoles.Admin]), usersController.GetAll);
+router.get("/id", jwtAuth, authorize([UserRoles.Admin]), usersController.GetById);
 router.post("/", jwtAuth, authorize([UserRoles.Admin]), usersController.Create);
-router.put("/", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), usersController.Update);
+router.put("/", jwtAuth, authorize([UserRoles.Admin]), usersController.Update);
 router.delete("/", jwtAuth, authorize([UserRoles.Admin]), usersController.Delete);
 
 export default router;
