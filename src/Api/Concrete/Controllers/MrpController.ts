@@ -73,7 +73,7 @@ export default class MrpController {
       return res.status(200).json({
         success: true,
         message: "MRP calculation completed",
-        data: mrpResult,
+        result: mrpResult,
       });
     } catch (error: any) {
       console.error("MRP Calculation Error: ", error.message);
