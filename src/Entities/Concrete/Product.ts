@@ -4,7 +4,7 @@ import { ProductUnitTypes } from "../../Utilities/Enums/Product/productEnums";
 
 const productSchema = new Schema<IProduct>(
   {
-    name: { type: String, required: true, unique: true, lowercase: true },
+    name: { type: String, required: true, unique: true },
     description: { type: String },
     unitType: { type: String, required: true, lowercase: true, enum: Object.values(ProductUnitTypes) },
     billOfMaterials: [
