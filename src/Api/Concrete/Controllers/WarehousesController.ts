@@ -17,7 +17,7 @@ export default class WarehousesController {
   };
 
   GetById = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
       const warehouse = await this._warehouseService.GetById(id, ["managerId"]);
       if (!warehouse) {
@@ -40,9 +40,9 @@ export default class WarehousesController {
   };
 
   Update = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { id,...warehouse } = req.body;
     try {
-      const updatedWarehouse = await this._warehouseService.Update(id, req.body);
+      const updatedWarehouse = await this._warehouseService.Update(id, warehouse);
       res.status(200).json({ success: true, message: "Warehouse updated", updatedWarehouse });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
