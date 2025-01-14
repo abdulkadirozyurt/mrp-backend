@@ -21,6 +21,11 @@ export default class MrpController {
     @inject(ContainerTypes.IMaterialService) private readonly _materialService: IMaterialService
   ) {}
 
+  // public CreateSupplierOrder = async (req: Request, res: Response): Promise<Response<any>> => {
+  
+
+  // }
+
   public Calculate = async (req: Request, res: Response): Promise<Response<any>> => {
     try {
       const { productId, requiredQuantity } = req.body;

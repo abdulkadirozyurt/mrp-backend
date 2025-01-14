@@ -39,9 +39,11 @@ export default class SupplierOrdersController {
 
   Create = async (req: Request, res: Response) => {
     const order: ISupplierOrder = req.body;
-    if (!order || !order.materials || order.materials.length === 0) {
-      return res.status(400).json({ success: false, message: "Order details are incomplete" });
-    }
+    console.log(order);
+    
+    // if (!order || !order.materials || order.materials.length === 0) {
+    //   return res.status(400).json({ success: false, message: "Order details are incomplete" });
+    // }
     try {
       const createdOrder = await this.supplierOrderService.Create(order);
       res.status(200).json({ success: true, message: "Supplier order created", order: createdOrder });
