@@ -1,7 +1,8 @@
 // src/Entities/Abstract/IWarehouse.ts
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
+import IModel from "../../Core/Entities/Abstract/IModel";
 
-export default interface IWarehouse {
+export default interface IWarehouse extends IModel, Document {
   name: string;
   location?: string;
   capacity?: number;
