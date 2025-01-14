@@ -50,7 +50,7 @@ export default class WarehousesController {
   };
 
   Delete = async (req: Request, res: Response) => {
-    const { id } = req.params;
+    const { id } = req.body;
     try {
       await this._warehouseService.Delete(id);
       res.status(200).json({ success: true, message: "Warehouse deleted" });
