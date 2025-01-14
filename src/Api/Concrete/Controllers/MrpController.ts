@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { inject, injectable } from "tsyringe";
-import ContainerTypes from "../../IoC/ContainerTypes";
-import IProductService from "../../../Business/Abstract/IProductService";
-import IMaterialService from "../../../Business/Abstract/IMaterialService";
-import IProduct from "../../../Entities/Abstract/IProduct";
 import mongoose from "mongoose";
+import { inject, injectable } from "tsyringe";
+import IMaterialService from "../../../Business/Abstract/IMaterialService";
+import IProductService from "../../../Business/Abstract/IProductService";
+import ISupplierOrderService from "../../../Business/Abstract/ISupplierOrderService";
 import IMaterial from "../../../Entities/Abstract/IMaterial";
+import ContainerTypes from "../../IoC/ContainerTypes";
 
 interface MrpResult {
   materialName: string;
@@ -18,13 +18,9 @@ interface MrpResult {
 export default class MrpController {
   constructor(
     @inject(ContainerTypes.IProductService) private readonly _productService: IProductService,
-    @inject(ContainerTypes.IMaterialService) private readonly _materialService: IMaterialService
+    @inject(ContainerTypes.IMaterialService) private readonly _materialService: IMaterialService,
+    @inject(ContainerTypes.ISupplierOrderService) private readonly _supplierOrderService: ISupplierOrderService
   ) {}
-
-  // public CreateSupplierOrder = async (req: Request, res: Response): Promise<Response<any>> => {
-  
-
-  // }
 
   public Calculate = async (req: Request, res: Response): Promise<Response<any>> => {
     try {
@@ -55,7 +51,7 @@ export default class MrpController {
       const mrpResult: Record<string, MrpResult> = {};
 
       product.billOfMaterials.forEach((bom) => {
-        const materialId = bom.materialId._id || bom.materialId; // `_id` alanına eriş
+        const materialId = bom.materialId._id || bom.materialId;
         const material = materials.find((material: IMaterial) => material._id?.toString() === materialId.toString());
 
         if (material) {
@@ -64,14 +60,12 @@ export default class MrpController {
           const availableStock = material.stockAmount || 0;
           const shortfall = totalRequiredQuantity > availableStock ? totalRequiredQuantity - availableStock : 0;
 
-          mrpResult[(material._id as mongoose.Types.ObjectId).toString()] = {
+          mrpResult[(material._id as mongoose.Schema.Types.ObjectId).toString()] = {
             materialName,
             totalRequiredQuantity,
             availableStock,
             shortfall,
           };
-
-          console.log(`Material: ${materialName}, Total Required: ${totalRequiredQuantity}, Available: ${availableStock}, Shortfall: ${shortfall}`);
         }
       });
 
