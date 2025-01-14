@@ -9,6 +9,8 @@ const ContainerTypes = {
   ICustomerOrderService: Symbol.for("ICustomerOrderService"),
   ISupplierOrderService: Symbol.for("ISupplierOrderService"),
   IInventoryMovementService: Symbol.for("IInventoryMovementService"),
+  IWarehouseService: Symbol.for("IWarehouseService"),
+
 
 
   // Data Access Layer
@@ -20,6 +22,7 @@ const ContainerTypes = {
   ICustomerOrderDal: Symbol.for("ICustomerOrderDal"),
   ISupplierOrderDal: Symbol.for("ISupplierOrderDal"),
   IInventoryMovementDal: Symbol.for("IInventoryMovementDal"),
+  IWarehouseDal: Symbol.for("IWarehouseDal"),
 
 
   // Controllers
@@ -33,6 +36,7 @@ const ContainerTypes = {
   SupplierOrdersController: Symbol.for("SupplierOrdersController"),
   InventoryMovementsController: Symbol.for("InventoryMovementsController"),
   MrpController: Symbol.for("MrpController"),
+  WarehouseController: Symbol.for("WarehouseController"),
 };
 
 export default ContainerTypes;

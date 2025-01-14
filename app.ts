@@ -13,6 +13,7 @@ import customerOrdersRouter from "./src/Api/Concrete/Routers/CustomerOrdersRoute
 import supplierOrdersRouter from "./src/Api/Concrete/Routers/SupplierOrdersRouter";
 import customerRouter from "./src/Api/Concrete/Routers/CustomerRouter";
 import mrpRouter from "./src/Api/Concrete/Routers/MrpRouter";
+import warehouseRouter from "./src/Api/Concrete/Routers/WarehouseRouter";
 
 dotenv.config();
 
@@ -38,6 +39,7 @@ app.use("/api/orders/customer-orders", customerOrdersRouter);
 app.use("/api/orders/supplier-orders", supplierOrdersRouter);
 app.use("/api/customers", customerRouter);
 app.use("/api/mrp", mrpRouter);
+app.use("/api/warehouses", warehouseRouter);
 
 async function startServer() {
   try {

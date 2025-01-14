@@ -43,17 +43,23 @@ import CustomerDal from "../../DataAccess/Concrete/Mongoose/CustomerDal";
 import ICustomerDal from "../../DataAccess/Abstract/ICustomerDal";
 import CustomersController from "../Concrete/Controllers/CustomersController";
 import MrpController from "../Concrete/Controllers/MrpController";
+import IWarehouseService from "../../Business/Abstract/IWarehouseService";
+import WarehouseManager from "../../Business/Concrete/WarehouseManager";
+import WarehouseDal from "../../DataAccess/Concrete/Mongoose/WarehouseDal";
+import IWarehouseDal from "../../DataAccess/Abstract/IWarehouseDal";
+import WarehousesController from "../Concrete/Controllers/WarehousesController";
 
 // singleton sadece bir kere oluşturulur ve her seferinde aynı nesne döner
+iocContainer.registerSingleton(ContainerTypes.MrpController, MrpController);
 iocContainer.registerSingleton(ContainerTypes.AuthController, AuthController);
 iocContainer.registerSingleton(ContainerTypes.UsersController, UsersController);
 iocContainer.registerSingleton(ContainerTypes.ProductsController, ProductsController);
 iocContainer.registerSingleton(ContainerTypes.MaterialsController, MaterialsController);
 iocContainer.registerSingleton(ContainerTypes.SuppliersController, SuppliersController);
 iocContainer.registerSingleton(ContainerTypes.CustomersController, CustomersController);
+iocContainer.registerSingleton(ContainerTypes.WarehouseController, WarehousesController);
 iocContainer.registerSingleton(ContainerTypes.CustomerOrdersController, CustomerOrdersController);
 iocContainer.registerSingleton(ContainerTypes.SupplierOrdersController, SupplierOrdersController);
-iocContainer.registerSingleton(ContainerTypes.MrpController, MrpController);
 
 // iocContainer.registerSingleton(ContainerTypes.InventoryMovementsController, InventoryMovementsController)
 
@@ -64,6 +70,7 @@ iocContainer.registerSingleton<IProductService>(ContainerTypes.IProductService, 
 iocContainer.registerSingleton<IMaterialService>(ContainerTypes.IMaterialService, MaterialManager);
 iocContainer.registerSingleton<ISupplierService>(ContainerTypes.ISupplierService, SupplierManager);
 iocContainer.registerSingleton<ICustomerService>(ContainerTypes.ICustomerService, CustomerManager);
+iocContainer.registerSingleton<IWarehouseService>(ContainerTypes.IWarehouseService, WarehouseManager);
 iocContainer.registerSingleton<ICustomerOrderService>(ContainerTypes.ICustomerOrderService, CustomerOrderManager);
 iocContainer.registerSingleton<ISupplierOrderService>(ContainerTypes.ISupplierOrderService, SupplierOrderManager);
 iocContainer.registerSingleton<IInventoryMovementService>(ContainerTypes.IInventoryMovementService, InventoryMovementManager);
@@ -74,6 +81,7 @@ iocContainer.registerSingleton<IProductDal>(ContainerTypes.IProductDal, ProductD
 iocContainer.registerSingleton<IMaterialDal>(ContainerTypes.IMaterialDal, MaterialDal);
 iocContainer.registerSingleton<ISupplierDal>(ContainerTypes.ISupplierDal, SupplierDal);
 iocContainer.registerSingleton<ICustomerDal>(ContainerTypes.ICustomerDal, CustomerDal);
+iocContainer.registerSingleton<IWarehouseDal>(ContainerTypes.IWarehouseDal, WarehouseDal);
 iocContainer.registerSingleton<ICustomerOrderDal>(ContainerTypes.ICustomerOrderDal, CustomerOrderDal);
 iocContainer.registerSingleton<ISupplierOrderDal>(ContainerTypes.ISupplierOrderDal, SupplierOrderDal);
 iocContainer.registerSingleton<IInventoryMovementDal>(ContainerTypes.IInventoryMovementDal, InventoryMovementDal);
