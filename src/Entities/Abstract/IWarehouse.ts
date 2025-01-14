@@ -6,5 +6,6 @@ export default interface IWarehouse extends IModel, Document {
   name: string;
   location?: string;
   capacity?: number;
+  description?: string;
   managerId?: mongoose.Schema.Types.ObjectId;
 }

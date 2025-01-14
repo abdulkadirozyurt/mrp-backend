@@ -9,7 +9,7 @@ export default class WarehousesController {
 
   GetAll = async (req: Request, res: Response) => {
     try {
-      const warehouses = await this._warehouseService.GetAll();
+      const warehouses = await this._warehouseService.GetAll({}, ["managerId"]);
       res.status(200).json({ success: true, message: "All warehouses listed", warehouses });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
@@ -19,7 +19,7 @@ export default class WarehousesController {
   GetById = async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
-      const warehouse = await this._warehouseService.GetById(id);
+      const warehouse = await this._warehouseService.GetById(id, ["managerId"]);
       if (!warehouse) {
         res.status(404).json({ success: false, message: "Warehouse not found" });
       } else {
