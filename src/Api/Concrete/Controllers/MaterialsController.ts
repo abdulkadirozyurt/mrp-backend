@@ -84,7 +84,7 @@ export default class MaterialsController {
     }
   };
 
-  GetSuppliersByMaterial = async (req: Request, res: Response): Promise<void> => {
+  public GetSuppliersByMaterial = async (req: Request, res: Response): Promise<void> => {
     try {
       const { materialId } = req.body;
 

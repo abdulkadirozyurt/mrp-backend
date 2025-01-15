@@ -12,5 +12,7 @@ router.get("/", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), suppli
 router.post("/", jwtAuth, authorize([UserRoles.Admin]), suppliersController.Create);
 router.put("/", jwtAuth, authorize([UserRoles.Admin]), suppliersController.Update);
 router.delete("/", jwtAuth, authorize([UserRoles.Admin]), suppliersController.Delete);
+// router.post("/materials", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), suppliersController.GetByMaterial);
+router.post("/suppliers-by-material", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), suppliersController.GetSuppliersByMaterial);
 
 export default router;
