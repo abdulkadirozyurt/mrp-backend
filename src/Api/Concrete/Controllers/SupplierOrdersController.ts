@@ -15,7 +15,7 @@ export default class SupplierOrdersController {
 
   GetAll = async (req: Request, res: Response) => {
     try {
-      const orders = await this._supplierOrderService.GetAll({}, ["materials.materialId", "supplierId"]);
+      const orders = await this._supplierOrderService.GetAll({}, ["supplierId", "warehouseId", "materialId"]);
       res.status(200).json({ success: true, message: "All supplier orders listed", orders });
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
@@ -28,7 +28,7 @@ export default class SupplierOrdersController {
       return res.status(400).json({ success: false, message: "Order ID is required" });
     }
     try {
-      const order = await this._supplierOrderService.GetById(id, ["materials.materialId", "supplierId"]);
+      const order = await this._supplierOrderService.GetById(id, ["supplierId", "warehouseId", "materialId"]);
       if (order) {
         res.status(200).json({ success: true, message: "Supplier order details received", order });
       } else {
@@ -40,10 +40,12 @@ export default class SupplierOrdersController {
   };
 
   Create = async (req: Request, res: Response) => {
+    console.log(req.body);
+
     const order: ISupplierOrder = req.body;
     console.log(order);
 
-    if (!order || !order.materials || order.materials.length === 0) {
+    if (!order || !order.materialId) {
       return res.status(400).json({ success: false, message: "Order details are incomplete" });
     }
     try {
@@ -53,55 +55,6 @@ export default class SupplierOrdersController {
       res.status(500).json({ success: false, message: error.message });
     }
   };
-
-  // CreateFromMRP = async (req: Request, res: Response) => {
-  //   try {
-  //     const { supplierId, warehouseId, mrpResult } = req.body;
-
-  //     if (!supplierId || !warehouseId || !mrpResult) {
-  //       return res.status(400).json({
-  //         success: false,
-  //         message: "Supplier ID, Warehouse ID, and MRP Result are required.",
-  //       });
-  //     }
-
-  //     const supplier = await this.supplierOrderService.GetById(supplierId);
-
-  //     const orderMaterials = Object.entries(mrpResult)
-  //       .filter(([_, result]: [string, any]) => result.shortfall > 0)
-  //       .map(([materialId, result]: [string, any]) => ({
-  //         materialId: new mongoose.Types.ObjectId(materialId),
-  //         quantity: result.shortfall as number,
-  //       }));
-
-  //     if (orderMaterials.length === 0) {
-  //       return res.status(400).json({
-  //         success: false,
-  //         message: "No materials with shortfall found in MRP result.",
-  //       });
-  //     }
-
-  //     const createdOrder = new SupplierOrder({
-  //       supplierId: new mongoose.Schema.Types.ObjectId(supplierId),
-  //       warehouseId: new mongoose.Schema.Types.ObjectId(warehouseId),
-  //       materials: orderMaterials,
-  //       companyName: supplier?.companyName,
-  //       status: "pending",
-  //       orderDate: new Date(),
-  //       deliveryDate: new Date(),
-  //     });
-
-  //     await createdOrder.save();
-
-  //     res.status(201).json({
-  //       success: true,
-  //       message: "Supplier order created from MRP result",
-  //       order: createdOrder,
-  //     });
-  //   } catch (error: any) {
-  //     res.status(500).json({ success: false, message: error.message });
-  //   }
-  // };
 
   Update = async (req: Request, res: Response) => {
     const { id, ...order } = req.body;
@@ -128,6 +81,4 @@ export default class SupplierOrdersController {
       res.status(500).json({ success: false, message: error.message });
     }
   };
-
-  
 }
