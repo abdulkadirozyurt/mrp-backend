@@ -2,13 +2,9 @@ import mongoose from "mongoose";
 import { IOrder } from "./IOrder";
 
 export default interface ISupplierOrder extends IOrder {
-  supplierId: mongoose.Schema.Types.ObjectId;
-  warehouseId: mongoose.Schema.Types.ObjectId;
+  supplierId: mongoose.Types.ObjectId;
+  warehouseId: mongoose.Types.ObjectId;
   purchaseOrderNumber?: string;
-  materialId: mongoose.Schema.Types.ObjectId;
+  materialId: mongoose.Types.ObjectId;
   quantity: number;
-  // materials: {
-  //   materialId: mongoose.Schema.Types.ObjectId;
-  //   quantity: number;
-  // }[];
 }

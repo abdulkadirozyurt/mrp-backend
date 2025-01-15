@@ -6,6 +6,7 @@ import IProductService from "../../../Business/Abstract/IProductService";
 import ISupplierOrderService from "../../../Business/Abstract/ISupplierOrderService";
 import IMaterial from "../../../Entities/Abstract/IMaterial";
 import ContainerTypes from "../../IoC/ContainerTypes";
+import ISupplierOrder from "../../../Entities/Abstract/ISupplierOrder";
 
 interface MrpResult {
   materialName: string;
@@ -76,6 +77,68 @@ export default class MrpController {
       });
     } catch (error: any) {
       console.error("MRP Calculation Error: ", error.message);
+      return res.status(500).json({ success: false, message: "Internal server error" });
+    }
+  };
+
+  public CreateSupplierOrder = async (req: Request, res: Response): Promise<Response<any>> => {
+    try {
+      const { warehouseId, mrpResult } = req.body;
+
+      if (!warehouseId || !mrpResult || Object.keys(mrpResult).length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Warehouse ID and MRP result are required.",
+        });
+      }
+
+      const orders = [];
+
+      for (const [materialId, result] of Object.entries(mrpResult)) {
+        const { shortfall } = result as any;
+
+        if (shortfall > 0) {
+          // Malzemeyi tedarik eden tedarikçileri bul
+          const material = await this.GetMaterial(materialId);
+          const suppliers = material?.suppliers || [];
+
+          if (suppliers.length === 0) {
+            return res.status(400).json({
+              success: false,
+              message: `No suppliers found for material ID ${materialId}`,
+            });
+          }
+
+          // İlk uygun tedarikçiyi seç
+          const supplierId = suppliers[0];
+
+          const warehouseIdObj = new mongoose.Types.ObjectId(warehouseId.toString());
+          const supplierIdObj = new mongoose.Types.ObjectId(supplierId.toString());
+          const materialIdObj = new mongoose.Types.ObjectId(materialId.toString());
+
+          // Sipariş oluştur
+          const order = await this._supplierOrderService.Create({
+            warehouseId: warehouseIdObj,
+            supplierId: supplierIdObj,
+            materialId: materialIdObj,
+            quantity: shortfall,
+            orderDate: new Date(),
+            deliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+            status: "pending",
+            companyName: "Default Company Name",
+          } as ISupplierOrder);
+
+          orders.push(order);
+        }
+      }
+
+      return res.status(201).json({
+        success: true,
+        message: "Supplier orders created successfully.",
+        orders,
+      });
+    } catch (error: any) {
+      console.error("CreateSupplierOrder Error: ", error.message);
       return res.status(500).json({ success: false, message: "Internal server error" });
     }
   };

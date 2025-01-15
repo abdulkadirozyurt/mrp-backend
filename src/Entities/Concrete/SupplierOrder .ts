@@ -9,12 +9,6 @@ const supplierOrderSchema = new Schema<ISupplierOrder>({
   purchaseOrderNumber: { type: String, required: false },
   materialId: { type: mongoose.Schema.Types.ObjectId, ref: "Material", required: true },
   quantity: { type: Number, required: true },
-  // materials: [
-  //   {
-  //     materialId: { type: mongoose.Schema.Types.ObjectId, ref: "Material", required: true },
-  //     quantity: { type: Number, required: true },
-  //   },
-  // ],
 });
 
 export const SupplierOrder = Order.discriminator<ISupplierOrder>("SupplierOrder", supplierOrderSchema);
