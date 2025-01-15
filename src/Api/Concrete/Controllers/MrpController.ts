@@ -85,52 +85,15 @@ export default class MrpController {
     try {
       const { warehouseId, mrpResult } = req.body;
 
-      if (!warehouseId || !mrpResult || Object.keys(mrpResult).length === 0) {
-        return res.status(400).json({
-          success: false,
-          message: "Warehouse ID and MRP result are required.",
-        });
+      // Girdi kontrolü
+      if (!warehouseId || !mongoose.Types.ObjectId.isValid(warehouseId)) {
+        return res.status(400).json({ success: false, message: "Invalid or missing warehouse ID." });
+      }
+      if (!mrpResult || Object.keys(mrpResult).length === 0) {
+        return res.status(400).json({ success: false, message: "MRP result is required." });
       }
 
-      const orders = [];
-
-      for (const [materialId, result] of Object.entries(mrpResult)) {
-        const { shortfall } = result as any;
-
-        if (shortfall > 0) {
-          // Malzemeyi tedarik eden tedarikçileri bul
-          const material = await this.GetMaterial(materialId);
-          const suppliers = material?.suppliers || [];
-
-          if (suppliers.length === 0) {
-            return res.status(400).json({
-              success: false,
-              message: `No suppliers found for material ID ${materialId}`,
-            });
-          }
-
-          // İlk uygun tedarikçiyi seç
-          const supplierId = suppliers[0];
-
-          const warehouseIdObj = new mongoose.Types.ObjectId(warehouseId.toString());
-          const supplierIdObj = new mongoose.Types.ObjectId(supplierId.toString());
-          const materialIdObj = new mongoose.Types.ObjectId(materialId.toString());
-
-          // Sipariş oluştur
-          const order = await this._supplierOrderService.Create({
-            warehouseId: warehouseIdObj,
-            supplierId: supplierIdObj,
-            materialId: materialIdObj,
-            quantity: shortfall,
-            orderDate: new Date(),
-            deliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-            status: "pending",
-            companyName: "Default Company Name",
-          } as ISupplierOrder);
-
-          orders.push(order);
-        }
-      }
+      const orders = await this.generateOrders(warehouseId, mrpResult);
 
       return res.status(201).json({
         success: true,
@@ -138,10 +101,144 @@ export default class MrpController {
         orders,
       });
     } catch (error: any) {
-      console.error("CreateSupplierOrder Error: ", error.message);
+      console.error("CreateSupplierOrder Error:", error.message);
       return res.status(500).json({ success: false, message: "Internal server error" });
     }
   };
+
+  // Sipariş oluşturma işlemini ayrı bir fonksiyona taşı
+  private async generateOrders(warehouseId: string, mrpResult: Record<string, any>): Promise<ISupplierOrder[]> {
+    const orders: ISupplierOrder[] = [];
+
+    for (const [materialId, result] of Object.entries(mrpResult)) {
+      const { shortfall } = result as any;
+
+      // Eksik stok varsa işleme devam et
+      if (shortfall > 0) {
+        const material = await this.GetMaterial(materialId);
+        if (!material || material.suppliers.length === 0) {
+          console.warn(`No suppliers found for material ID ${materialId}`);
+          continue; // Bu malzeme için sipariş oluşturulmaz
+        }
+
+        const supplierId = material.suppliers[0]; // İlk uygun tedarikçiyi seç
+
+        const order = await this.createOrder({
+          warehouseId,
+          supplierId,
+          materialId,
+          quantity: shortfall,
+        } as any);
+
+        orders.push(order);
+      }
+    }
+
+    return orders;
+  }
+
+  // Tek bir sipariş oluşturma işlemini yöneten fonksiyon
+  private async createOrder({
+    warehouseId,
+    supplierId,
+    materialId,
+    quantity,
+  }: {
+    warehouseId: string;
+    supplierId: string;
+    materialId: string;
+    quantity: number;
+  }): Promise<ISupplierOrder> {
+    const orderData: Partial<ISupplierOrder> = {
+      warehouseId: new mongoose.Types.ObjectId(warehouseId),
+      supplierId: new mongoose.Types.ObjectId(supplierId),
+      materialId: new mongoose.Types.ObjectId(materialId),
+      quantity,
+      orderDate: new Date(),
+      deliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 gün sonrası
+      status: "pending",
+      companyName: "Default Company Name",
+    };
+
+    return this._supplierOrderService.Create(orderData as ISupplierOrder);
+  }
+
+  // public CreateSupplierOrder = async (req: Request, res: Response): Promise<Response<any>> => {
+  //   try {
+  //     const { warehouseId, mrpResult } = req.body;
+
+  //     console.log("Gelen warehouseId:", warehouseId);
+  //     console.log("Gelen mrpResult:", mrpResult);
+
+  //     if (!mongoose.Types.ObjectId.isValid(warehouseId)) {
+  //       return res.status(400).json({ success: false, message: "Invalid warehouseId format." });
+  //     }
+
+  //     if (!warehouseId || !mrpResult || Object.keys(mrpResult).length === 0) {
+  //       return res.status(400).json({
+  //         success: false,
+  //         message: "Warehouse ID and MRP result are required.",
+  //       });
+  //     }
+
+  //     const orders = [];
+
+  //     for (const [materialId, result] of Object.entries(mrpResult)) {
+  //       const { shortfall } = result as any;
+
+  //       if (shortfall > 0) {
+  //         const material = await this.GetMaterial(materialId);
+  //         const suppliers = material?.suppliers || [];
+
+  //         if (suppliers.length === 0) {
+  //           return res.status(400).json({
+  //             success: false,
+  //             message: `No suppliers found for material ID ${materialId}`,
+  //           });
+  //         }
+
+  //         const selectedSupplier = suppliers[0]; // İlk tedarikçiyi seç
+  //         const supplierIdObj = new mongoose.Types.ObjectId((selectedSupplier as any)._id.toString());
+
+  //         if (typeof selectedSupplier === "object" && "_id" in selectedSupplier) {
+  //           // Eğer supplier bir doküman nesnesiyse _id'sini kullan
+  //           supplierIdObj = new mongoose.Types.ObjectId((selectedSupplier as any)._id.toString());
+  //         } else if (mongoose.Types.ObjectId.isValid(selectedSupplier)) {
+  //           // Eğer supplier zaten bir ObjectId ise doğrudan kullan
+  //           supplierIdObj = new mongoose.Types.ObjectId(selectedSupplier.toString());
+  //         } else {
+  //           // Eğer supplierId geçerli değilse hata döndür
+  //           return res.status(400).json({
+  //             success: false,
+  //             message: `Invalid supplierId format: ${JSON.stringify(selectedSupplier)}`,
+  //           });
+  //         }
+
+  //         const order = await this._supplierOrderService.Create({
+  //           warehouseId: new mongoose.Types.ObjectId(warehouseId),
+  //           supplierId: new mongoose.Types.ObjectId(supplierIdObj),
+  //           materialId: new mongoose.Types.ObjectId(materialId),
+  //           quantity: shortfall,
+  //           orderDate: new Date(),
+  //           deliveryDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  //           status: "pending",
+  //           companyName: "Default Company Name",
+  //         } as ISupplierOrder);
+
+  //         orders.push(order);
+  //       }
+  //     }
+
+  //     return res.status(201).json({
+  //       success: true,
+  //       message: "Supplier orders created successfully.",
+  //       orders,
+  //     });
+  //   } catch (error: any) {
+  //     console.error("CreateSupplierOrder Error: ", error.message);
+  //     return res.status(500).json({ success: false, message: "Internal server error" });
+  //   }
+  // };
 
   public GetProduct = async (productId: string) => {
     try {
