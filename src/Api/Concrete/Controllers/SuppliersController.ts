@@ -73,6 +73,7 @@ export default class SuppliersController {
 
   public GetSuppliersByMaterial = async (req: Request, res: Response) => {
     const { materialId } = req.body;
+console.log(materialId);
 
     if (!materialId || !mongoose.Types.ObjectId.isValid(materialId)) {
       return res.status(400).json({ success: false, message: "Invalid or missing Material ID" });
@@ -94,7 +95,7 @@ export default class SuppliersController {
         materials: supplier.materialsOfSupplied.filter((material: any) => material._id?.toString() === materialId),
       }));
 
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         suppliers: suppliersWithMaterials,
       });
