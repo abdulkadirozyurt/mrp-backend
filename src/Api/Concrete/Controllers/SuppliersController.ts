@@ -71,25 +71,6 @@ export default class SuppliersController {
     }
   };
 
-  public GetByMaterial = async (req: Request, res: Response) => {
-    const { materialId } = req.body;
-
-    if (!materialId) {
-      return res.status(400).json({ success: false, message: "Material ID is required" });
-    }
-
-    try {
-      const suppliers = await this._supplierService.GetAll({ materialsOfSupplied: materialId });
-      if (!suppliers || suppliers.length === 0) {
-        return res.status(404).json({ success: false, message: "No suppliers found for the given material ID" });
-      }
-      res.status(200).json({ success: true, suppliers });
-    } catch (error: any) {
-      console.error("Error fetching suppliers by material:", error.message);
-      res.status(500).json({ success: false, message: error.message });
-    }
-  };
-
   public GetSuppliersByMaterial = async (req: Request, res: Response) => {
     const { materialId } = req.body;
 

@@ -84,26 +84,5 @@ export default class MaterialsController {
     }
   };
 
-  public GetSuppliersByMaterial = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { materialId } = req.body;
-
-      if (!materialId || !mongoose.Types.ObjectId.isValid(materialId)) {
-        res.status(400).json({ success: false, message: "Invalid material ID" });
-        return;
-      }
-
-      const material = await this._materialService.GetById(materialId, ["suppliers"]);
-
-      if (!material) {
-        res.status(404).json({ success: false, message: "Material not found" });
-        return;
-      }
-
-      res.status(200).json({ success: true, suppliers: material.suppliers });
-    } catch (error: any) {
-      console.error("Error fetching suppliers for material:", error.message);
-      res.status(500).json({ success: false, message: "Internal server error" });
-    }
-  };
+ 
 }

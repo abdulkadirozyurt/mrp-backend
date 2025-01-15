@@ -14,6 +14,5 @@ router.delete("/", jwtAuth, authorize([UserRoles.Admin]), materialsController.De
 router.get("/", jwtAuth, authorize([UserRoles.Admin, UserRoles.ProductionPlanner]), materialsController.GetAll);
 router.post("/id", jwtAuth, authorize([UserRoles.Admin, UserRoles.ProductionPlanner]), materialsController.GetById);
 router.post("/transfer", jwtAuth, authorize([UserRoles.Admin, UserRoles.ProductionPlanner]), materialsController.TransferStock);
-router.post("/get-suppliers", jwtAuth, authorize([UserRoles.Admin, UserRoles.Manager]), materialsController.GetSuppliersByMaterial);
 
 export default router;
