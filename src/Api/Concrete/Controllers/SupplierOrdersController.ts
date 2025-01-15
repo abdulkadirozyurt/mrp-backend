@@ -40,10 +40,10 @@ export default class SupplierOrdersController {
   };
 
   Create = async (req: Request, res: Response) => {
-    console.log(req.body);
+    
 
     const order: ISupplierOrder = req.body;
-    console.log(order);
+    
 
     if (!order || !order.materialId) {
       return res.status(400).json({ success: false, message: "Order details are incomplete" });
