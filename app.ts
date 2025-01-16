@@ -45,24 +45,18 @@ interface CustomSocket extends Socket {
   userId?: string;
 }
 
-io.on("connection", (socket: CustomSocket) => {
+io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
 
-  // Kullanıcı ID'si frontend'den alınacak ve socket ile ilişkilendirilecek
-  socket.on("setUserId", (userId: string) => {
-    console.log(`User ID set for socket ${socket.id}: ${userId}`);
-    socket.userId = userId; // Kullanıcıyı socket ile ilişkilendiriyoruz
-  });
+  // Kullanıcıdan gelen role güncelleme isteği
+  socket.on("updateRole", ({ userId, newRole }) => {
+    console.log(`Role update received for user ${userId}: ${newRole}`);
+    console.log(`Role update received for user: ${userId}, new role: ${newRole}`);
 
-  // Rol güncelleme işlemi alındığında
-  socket.on("updateRole", (data) => {
-    console.log("Rol güncelleme isteği alındı:", data);
-    const { userId, newRole } = data;
+    // Tüm istemcilere güncellenen rol bilgisini ilet
+    io.emit("roleUpdated", { userId, newRole });
+    console.log(`roleUpdated event emitted for user: ${userId}, new role: ${newRole}`);
 
-    // Burada sadece doğru kullanıcıya mesaj gönderiyoruz
-    if (socket.userId === userId) {
-      io.emit("roleUpdated", { userId, newRole }); // Rol güncellenince tüm bağlanan istemcilere bildirilir
-    }
   });
 
   socket.on("disconnect", () => {

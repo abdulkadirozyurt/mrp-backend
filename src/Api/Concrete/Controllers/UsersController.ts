@@ -67,6 +67,8 @@ export default class UsersController {
   };
 
   getUserProfile = async (req: Request, res: Response) => {
+    console.log("User ID in getUserProfile:", req.user?._id);
+
     try {
       const userId = req?.user?._id; // Token'dan gelen kullanıcı ID'si
       const user = await User.findById(userId).select("-password"); // Şifreyi dışarıda bırakıyoruz
