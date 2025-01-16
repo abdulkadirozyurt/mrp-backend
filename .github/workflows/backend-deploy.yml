@@ -26,19 +26,14 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.VDS_IP }} >> ~/.ssh/known_hosts
 
-      - name: Build Docker Image
-        run: |
+      - name: Build Docker Image        
+        run: |  
           echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "CLIENT_URL=http://${{ secrets.VDS_IP }}" >> .env
-          echo "${{ secrets.SSL_CERT }}" | base64 -d > selfsigned.crt
-          echo "${{ secrets.SSL_KEY }}" | base64 -d > selfsigned.key
-          docker build --no-cache --platform=linux/amd64 -t my-backend-image \
-            --build-arg SSL_CERT_PATH=selfsigned.crt \
-            --build-arg SSL_KEY_PATH=selfsigned.key .
-
+          docker build --no-cache --platform=linux/amd64 -t my-backend-image .
           docker tag my-backend-image ${{ secrets.DOCKER_USERNAME }}/my-backend-image:latest
 
       - name: Push Docker Image to DockerHub
@@ -62,6 +57,6 @@ jobs:
           docker run -d \
             --name backend-container \
             --restart always \
-            -p 443:443 \
+            -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
           EOFMARK
