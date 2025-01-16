@@ -57,6 +57,6 @@ jobs:
           docker run -d \
             --name backend-container \
             --restart always \
-            -p 5000:5000 \            
+            -p 5000:5000 \
             $DOCKER_USERNAME/my-backend-image:latest
           EOFMARK
