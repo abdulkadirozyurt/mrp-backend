@@ -3,30 +3,24 @@ import "reflect-metadata";
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
-import userRouter from "./src/Api/Concrete/Routers/UserRouter";
-import authRouter from "./src/Api/Concrete/Routers/AuthRouter";
-import productRouter from "./src/Api/Concrete/Routers/ProductRouter";
-import materialRouter from "./src/Api/Concrete/Routers/MaterialRouter";
-import supplierRouter from "./src/Api/Concrete/Routers/SupplierRouter";
-import DbConfig from "./src/DataAccess/Concrete/Mongoose/Config/DbConfig";
-import customerOrdersRouter from "./src/Api/Concrete/Routers/CustomerOrdersRouter";
-import supplierOrdersRouter from "./src/Api/Concrete/Routers/SupplierOrdersRouter";
-import customerRouter from "./src/Api/Concrete/Routers/CustomerRouter";
-import mrpRouter from "./src/Api/Concrete/Routers/MrpRouter";
-import warehouseRouter from "./src/Api/Concrete/Routers/WarehouseRouter";
-import fs from "fs";
-import path from "path";
-import https from "https";
+import http from "http";
 import { Server, Socket } from "socket.io";
+import authRouter from "./src/Api/Concrete/Routers/AuthRouter";
+import customerOrdersRouter from "./src/Api/Concrete/Routers/CustomerOrdersRouter";
+import customerRouter from "./src/Api/Concrete/Routers/CustomerRouter";
+import materialRouter from "./src/Api/Concrete/Routers/MaterialRouter";
+import mrpRouter from "./src/Api/Concrete/Routers/MrpRouter";
+import productRouter from "./src/Api/Concrete/Routers/ProductRouter";
+import supplierOrdersRouter from "./src/Api/Concrete/Routers/SupplierOrdersRouter";
+import supplierRouter from "./src/Api/Concrete/Routers/SupplierRouter";
+import userRouter from "./src/Api/Concrete/Routers/UserRouter";
+import warehouseRouter from "./src/Api/Concrete/Routers/WarehouseRouter";
+import DbConfig from "./src/DataAccess/Concrete/Mongoose/Config/DbConfig";
 
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const app = express();
-
-const privateKey = fs.readFileSync(path.join(__dirname, "selfsigned.key"), "utf8");
-const certificate = fs.readFileSync(path.join(__dirname, "selfsigned.crt"), "utf8");
-const credentials = { key: privateKey, cert: certificate };
 
 app.use(express.json());
 app.use(
@@ -37,10 +31,9 @@ app.use(
   })
 );
 
-const httpServer = https.createServer(app);
-const httpsServer = https.createServer(credentials, app);
+const server = http.createServer(app);
 
-const io = new Server(httpsServer, {
+const io = new Server(server, {
   cors: {
     origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -87,13 +80,8 @@ async function startServer() {
   try {
     await DbConfig.ConnectDb();
     // HTTP sunucusunu başlat
-    httpServer.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`HTTP server is running on port ${PORT}`);
-    });
-
-    // HTTPS sunucusunu başlat
-    httpsServer.listen(443, () => {
-      console.log("HTTPS server is running on port 443");
     });
   } catch (error) {
     console.error("Veritabanı bağlantısı başarısız oldu:", error);
