@@ -13,5 +13,5 @@ router.get("/id", jwtAuth, authorize([UserRoles.Admin]), usersController.GetById
 router.post("/", jwtAuth, authorize([UserRoles.Admin]), usersController.Create);
 router.put("/", jwtAuth, authorize([UserRoles.Admin]), usersController.Update);
 router.delete("/", jwtAuth, authorize([UserRoles.Admin]), usersController.Delete);
-
+router.get("/profile", jwtAuth, usersController.getUserProfile);
 export default router;
