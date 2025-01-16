@@ -14,6 +14,8 @@ import supplierOrdersRouter from "./src/Api/Concrete/Routers/SupplierOrdersRoute
 import customerRouter from "./src/Api/Concrete/Routers/CustomerRouter";
 import mrpRouter from "./src/Api/Concrete/Routers/MrpRouter";
 import warehouseRouter from "./src/Api/Concrete/Routers/WarehouseRouter";
+import http from "http";
+import { Server } from "socket.io";
 
 dotenv.config();
 
@@ -28,6 +30,36 @@ app.use(
     credentials: true,
   })
 );
+
+
+const server = http.createServer(app);
+const io = new Server(server)
+
+
+// WebSocket bağlantısı
+io.on("connection", (socket) => {
+  console.log(`Client connected: ${socket.id}`);
+
+  // Kullanıcı rolü güncellenirse, ilgili event'i yay
+  socket.on("updateRole", (data) => {
+    console.log("Rol güncelleme isteği alındı:", data);
+    const { userId, newRole } = data;
+    io.emit("roleUpdated", { userId, newRole });
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`Client disconnected: ${socket.id}`);
+  });
+});
+
+
+
+
+
+
+
+
+
 
 // routes
 app.use("/api/auth", authRouter);
