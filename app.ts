@@ -15,6 +15,7 @@ import customerRouter from "./src/Api/Concrete/Routers/CustomerRouter";
 import mrpRouter from "./src/Api/Concrete/Routers/MrpRouter";
 import warehouseRouter from "./src/Api/Concrete/Routers/WarehouseRouter";
 import fs from "fs";
+import path from "path";
 import https from "https";
 import { Server, Socket } from "socket.io";
 
@@ -23,8 +24,8 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-const privateKey = fs.readFileSync("/app/selfsigned.key", "utf8");
-const certificate = fs.readFileSync("/app/selfsigned.crt", "utf8");
+const privateKey = fs.readFileSync(path.join(__dirname, "selfsigned.key"), "utf8");
+const certificate = fs.readFileSync(path.join(__dirname, "selfsigned.crt"), "utf8");
 const credentials = { key: privateKey, cert: certificate };
 
 app.use(express.json());
