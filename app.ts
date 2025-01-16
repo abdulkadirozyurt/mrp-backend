@@ -14,7 +14,8 @@ import supplierOrdersRouter from "./src/Api/Concrete/Routers/SupplierOrdersRoute
 import customerRouter from "./src/Api/Concrete/Routers/CustomerRouter";
 import mrpRouter from "./src/Api/Concrete/Routers/MrpRouter";
 import warehouseRouter from "./src/Api/Concrete/Routers/WarehouseRouter";
-import http from "http";
+import fs from "fs";
+import https from "https";
 import { Server, Socket } from "socket.io";
 
 dotenv.config();
@@ -22,19 +23,25 @@ dotenv.config();
 const PORT = process.env.PORT || 5000;
 const app = express();
 
+const privateKey = fs.readFileSync("/app/selfsigned.key", "utf8");
+const certificate = fs.readFileSync("/app/selfsigned.crt", "utf8");
+const credentials = { key: privateKey, cert: certificate };
+
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.CLIENT_URL ,
+    origin: process.env.CLIENT_URL,
     methods: "GET,PUT,POST,DELETE,PATCH",
     credentials: true,
   })
 );
 
-const server = http.createServer(app);
-const io = new Server(server, {
+const httpServer = https.createServer(app);
+const httpsServer = https.createServer(credentials, app);
+
+const io = new Server(httpsServer, {
   cors: {
-    origin: process.env.CLIENT_URL ,
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   },
@@ -56,7 +63,6 @@ io.on("connection", (socket) => {
     // Tüm istemcilere güncellenen rol bilgisini ilet
     io.emit("roleUpdated", { userId, newRole });
     console.log(`roleUpdated event emitted for user: ${userId}, new role: ${newRole}`);
-
   });
 
   socket.on("disconnect", () => {
@@ -79,8 +85,14 @@ app.use("/api/warehouses", warehouseRouter);
 async function startServer() {
   try {
     await DbConfig.ConnectDb();
-    server.listen(PORT, () => {
-      console.log(`Sunucu ${PORT} portunda çalışıyor.`);
+    // HTTP sunucusunu başlat
+    httpServer.listen(PORT, () => {
+      console.log(`HTTP server is running on port ${PORT}`);
+    });
+
+    // HTTPS sunucusunu başlat
+    httpsServer.listen(443, () => {
+      console.log("HTTPS server is running on port 443");
     });
   } catch (error) {
     console.error("Veritabanı bağlantısı başarısız oldu:", error);
