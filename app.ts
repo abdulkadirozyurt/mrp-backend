@@ -48,21 +48,13 @@ interface CustomSocket extends Socket {
 }
 
 io.on("connection", (socket) => {
-  console.log(`Client connected: ${socket.id}`);
-
   // Kullanıcıdan gelen role güncelleme isteği
   socket.on("updateRole", ({ userId, newRole }) => {
-    console.log(`Role update received for user ${userId}: ${newRole}`);
-    console.log(`Role update received for user: ${userId}, new role: ${newRole}`);
-
     // Tüm istemcilere güncellenen rol bilgisini ilet
     io.emit("roleUpdated", { userId, newRole });
-    console.log(`roleUpdated event emitted for user: ${userId}, new role: ${newRole}`);
   });
 
-  socket.on("disconnect", () => {
-    console.log(`Client disconnected: ${socket.id}`);
-  });
+  socket.on("disconnect", () => {});
 });
 
 // routes
